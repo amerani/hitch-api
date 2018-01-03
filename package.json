@@ -1,0 +1,19 @@
+{
+  "name": "hitch",
+  "version": "0.1.0",
+  "description": "Hitch hiking for modern hippies Long distance ride sharing for believers of humanity",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/project-hitch/hitch.git"
+  },
+  "author": "Alek Merani",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://gitlab.com/project-hitch/hitch/issues"
+  },
+  "homepage": "https://gitlab.com/project-hitch/hitch#README"
+}
