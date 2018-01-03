@@ -59,4 +59,6 @@ typings/
 
 .DS_Store
 
-dist
+build/
+tmp/
+temp/
