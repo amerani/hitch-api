@@ -5,9 +5,11 @@ import {
     OneToOne, 
     JoinColumn, 
     CreateDateColumn, 
-    UpdateDateColumn
+    UpdateDateColumn,
+    OneToMany
 } from "typeorm";
 import { UserAccount } from "./UserAccount";
+import { Reservation } from "./Reservation";
 
 @Entity({schema: "public"})
 export class User {
@@ -31,4 +33,10 @@ export class User {
     userAccount => userAccount.user, 
     {cascadeAll: true, eager: true})
     userAccount: UserAccount;
+
+    @OneToMany(type => Reservation, res => res.reservedBy)
+    reservations: Reservation[]
+
+    @OneToMany(type => Reservation, res => res.createdBy)
+    reservationsCreated: Reservation[]
 }
