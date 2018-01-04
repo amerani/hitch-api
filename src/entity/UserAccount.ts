@@ -1,4 +1,12 @@
-import { Entity, PrimaryColumn, Column, OneToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { 
+    Entity, 
+    PrimaryColumn, 
+    Column, 
+    OneToOne, 
+    JoinColumn, 
+    PrimaryGeneratedColumn, 
+    CreateDateColumn, 
+    UpdateDateColumn } from 'typeorm';
 import { User } from './User';
 
 @Entity({schema: "auth"})
@@ -12,6 +20,12 @@ export class UserAccount {
 
     @Column({type: "text"})
     passwordHash: string;
+
+    @CreateDateColumn()
+    createdAt: string;
+    
+    @UpdateDateColumn()
+    updatedAt: string;
 
     @OneToOne(type => User,
     user => user.userAccount)
