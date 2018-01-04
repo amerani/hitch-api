@@ -1,17 +1,38 @@
 import "reflect-metadata";
-import {createConnection} from "typeorm";
+import {createConnection, getRepository} from "typeorm";
 import {User} from "./entity/User";
 import { UserAccount } from "./entity/UserAccount";
-import {createAccountAsync} from "./commands";
+import {createAccountAsync, createReservationAsync} from "./commands";
+import { Reservation } from "./entity/Reservation";
 
 createConnection().then(async connection => {
 
-    const user = await createAccountAsync({
+    let user = await createAccountAsync({
         firstName: "alek",
         lastName: "merani",
         email: `${Date.now()}@g.co`,
         passwordHash: "password"
     })
+
+    await createReservationAsync({
+        type: "seat",
+        description: "clean",
+        price: 100,
+        creator: user
+    });
+
+    await createReservationAsync({
+        type: "seat",
+        description: "climate controlled",
+        price: 150,
+        creator: user
+    });
+
+    user = await getRepository(User)
+        .createQueryBuilder("u")
+        .leftJoinAndSelect("u.reservationsCreated", "r")
+        .where("u.id = :id", {id: user.id})
+        .getOne();
 
     console.log(user);
 
