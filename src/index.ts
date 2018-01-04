@@ -2,20 +2,19 @@ import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {User} from "./entity/User";
 import { UserAccount } from "./entity/UserAccount";
+import {createAccountAsync} from "./commands";
 
 createConnection().then(async connection => {
 
-    console.log("Inserting a new user into the database...");
-    const user = new User();
-    user.firstName = "Timber";
-    user.lastName = "Saw";
+    const user = await createAccountAsync({
+        firstName: "alek",
+        lastName: "merani",
+        email: `${Date.now()}@g.co`,
+        passwordHash: "password"
+    })
 
-    user.userAccount = new UserAccount();
-    user.userAccount.email = `${Date.now()}@g.co`;
-    user.userAccount.passwordHash = "password";
+    console.log(user);
 
-    const createdUser = await connection.manager.save(user);
-    
-    console.log(await connection.manager.findOneById<User>(User, createdUser.id));
-    
+    connection.close();
+
 }).catch(error => console.log(error));
