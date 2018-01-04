@@ -17,8 +17,7 @@ export async function createAccountAsync(
 }
 
 export async function createReservationAsync(
-    {type, description, price, creator}: 
-    {type: ReservationType, description: string, price: number, creator: User})
+    {type, description, price, creator}: CreateReservationModel)
     : Promise<Reservation> {
 
         const reservationRepo = getRepository(Reservation);
@@ -29,4 +28,26 @@ export async function createReservationAsync(
             createdBy: creator
         });
         return reservationRepo.save(reservation);
+}
+
+export async function createReservationsBulkAsync(
+    reservations: CreateReservationModel[])
+    : Promise<Reservation[]>{
+    const reservationRepo = getRepository(Reservation);
+    let entities = reservations.map(r => reservationRepo.create({
+        type: r.type,
+        description: r.description,
+        price: r.price,
+        createdBy: r.creator
+    }));
+
+    return reservationRepo.save(entities);
+}
+
+export declare type CreateReservationModel = 
+{
+    type: ReservationType;
+    description: string | null;
+    price: number;
+    creator: User;
 }

@@ -17,8 +17,8 @@ export class Reservation {
     @Column()
     type: ReservationType; 
 
-    @Column()
-    description: string;
+    @Column({type: "text", nullable: true})
+    description: string | null;
 
     @Column({type: "decimal"})
     price: number; 
