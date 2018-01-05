@@ -5,6 +5,7 @@ import { UserAccount } from "./entity/UserAccount";
 import {createAccountAsync, createReservationsBulkAsync, createReservationAsync} from "./commands";
 import { Reservation } from "./entity/Reservation";
 import { readWithCreatedReservations } from "./queries";
+import { Transport } from "./entity/Transport";
 
 createConnection().then(async connection => {
 
@@ -15,26 +16,74 @@ createConnection().then(async connection => {
         passwordHash: "password"
     })
 
-    await createReservationAsync({
-        type: "seat", creator: user, price: 0, description: null
-    })
+    const rv = {
+        type: "rv",
+        description: "burning man coach",
+        capacity: 8,
+        plateNumber: "LOVE420",
+        ymm: "2000 RV RV",
+        createdBy: user,
+        operatedBy: user,
+        reservations: [
+            {
+                type: "seat",
+                price: 100,
+                createdBy: user
+            },
+            {
+                type: "seat",
+                price: 100,
+                createdBy: user
+            },
+            {
+                type: "seat",
+                price: 100,
+                createdBy: user
+            }
+        ]
+    }
 
-    await createReservationsBulkAsync([{
-        type: "recliner",
-        description: "clean",
-        price: 100,
-        creator: user
-    },
-    {
-        type: "seat",
-        description: "leather",
-        price: 150,
-        creator: user
-    }]);
+    const transportEntity = getRepository(Transport)
+        .merge(new Transport(), {
+            type: "rv",
+            description: "burning man coach",
+            capacity: 8,
+            plateNumber: "LOVE420",
+            ymm: "2000 RV RV",
+            createdBy: user,
+            operatedBy: user,
+            reservations: [
+                {
+                    type: "seat",
+                    price: 100,
+                    createdBy: user,
+                    reservedBy: {
+                        firstName: "buddy",
+                        lastName: "bro"
+                    }
+                },
+                {
+                    type: "seat",
+                    price: 100,
+                    createdBy: user
+                },
+                {
+                    type: "seat",
+                    price: 100,
+                    createdBy: user
+                }
+            ]
+        });
+    
+    const createdRv = await getRepository(Transport).save(transportEntity);
 
-    user = await readWithCreatedReservations(user.id);
+    const t = await getRepository(Transport).findOneById(createdRv.id, {
+        relations: ["createdBy", "reservations", "reservations.reservedBy"]
+    });
 
-    console.log(user);
+    console.log(t);
+
+    console.log(t.reservations.filter(r => r.reservedBy != null)[0].reservedBy)
 
     connection.close();
 

@@ -7,6 +7,7 @@ import {
     ManyToOne
 } from "typeorm";
 import { User } from "./User";
+import { Transport } from "./Transport";
 
 @Entity({schema: "public"})
 export class Reservation {
@@ -23,11 +24,17 @@ export class Reservation {
     @Column({type: "decimal"})
     price: number; 
 
-    @ManyToOne(type => User, user => user.reservationsCreated)
+    @ManyToOne(type => User, user => user.reservationsCreated, 
+    {cascadeAll: true})
     createdBy: User;
 
-    @ManyToOne(type => User, user => user.reservations)
+    @ManyToOne(type => User, user => user.reservations, 
+    {cascadeAll: true})
     reservedBy: User;
+
+    @ManyToOne(type => Transport, t => t.reservations, 
+    {cascadeAll: true})
+    transport: Transport
 
     @CreateDateColumn()
     createdAt: string;
