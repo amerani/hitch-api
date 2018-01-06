@@ -5,7 +5,8 @@ import {
     Column, 
     UpdateDateColumn, 
     CreateDateColumn, 
-    ManyToOne} from "typeorm";
+    ManyToOne,
+    Generated} from "typeorm";
 import { Location } from "./Location";
 import { Transport } from "./Transport";
 import { Trip } from "./Trip";
@@ -16,6 +17,10 @@ export class Leg
 {
     @PrimaryGeneratedColumn("uuid")
     id:number;
+
+    @Column()    
+    @Generated("uuid")
+    graphId: number;
 
     @OneToOne(type => Location, l => l.leg,
     {cascadeInsert: true})

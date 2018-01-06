@@ -6,7 +6,8 @@ import {
     JoinColumn, 
     PrimaryGeneratedColumn, 
     CreateDateColumn, 
-    UpdateDateColumn } from 'typeorm';
+    UpdateDateColumn, 
+    Generated} from 'typeorm';
 import { User } from './User';
 
 @Entity({schema: "auth"})
@@ -14,6 +15,10 @@ export class UserAccount {
 
     @PrimaryGeneratedColumn("uuid")
     id: number;
+
+    @Column()    
+    @Generated("uuid")
+    graphId: number;
 
     @Column({type:"text", unique: true})
     email: string;

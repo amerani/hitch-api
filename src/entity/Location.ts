@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
+import { 
+    Entity, 
+    PrimaryGeneratedColumn, 
+    Column, 
+    OneToOne, 
+    JoinColumn, 
+    Generated } from "typeorm";
 import { Leg } from "./Leg";
 
 @Entity({schema: "public"})
@@ -6,6 +12,10 @@ export class Location {
 
     @PrimaryGeneratedColumn("uuid")
     id: number;
+
+    @Column()    
+    @Generated("uuid")
+    graphId: number;
 
     @Column()
     city: string;

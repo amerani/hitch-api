@@ -6,7 +6,8 @@ import {
     JoinColumn, 
     CreateDateColumn, 
     UpdateDateColumn,
-    OneToMany
+    OneToMany,
+    Generated
 } from "typeorm";
 import { UserAccount } from "./UserAccount";
 import { Reservation } from "./Reservation";
@@ -17,6 +18,10 @@ export class User {
 
     @PrimaryGeneratedColumn("uuid")
     id: number;
+
+    @Column()    
+    @Generated("uuid")
+    graphId: number;
 
     @Column()
     firstName: string;

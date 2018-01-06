@@ -6,7 +6,8 @@ import {
     OneToMany, 
     UpdateDateColumn, 
     Entity,
-    OneToOne
+    OneToOne,
+    Generated
 } from "typeorm";
 import { User } from "./User";
 import { Reservation } from "./Reservation";
@@ -17,6 +18,10 @@ export class Transport
 {
     @PrimaryGeneratedColumn("uuid")
     id: number;
+
+    @Column()    
+    @Generated("uuid")
+    graphId: number;
 
     @Column()
     type: TransportType;

@@ -4,7 +4,8 @@ import {
     Column, 
     CreateDateColumn, 
     UpdateDateColumn, 
-    ManyToOne
+    ManyToOne,
+    Generated
 } from "typeorm";
 import { User } from "./User";
 import { Transport } from "./Transport";
@@ -14,6 +15,10 @@ export class Reservation {
 
     @PrimaryGeneratedColumn("uuid")
     id: number;
+
+    @Column()    
+    @Generated("uuid")
+    graphId: number;
 
     @Column()
     type: ReservationType; 
