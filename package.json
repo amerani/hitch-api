@@ -23,8 +23,10 @@
       "typescript": "2.5.2"
    },
    "dependencies": {
-      "typeorm": "0.1.9",
+      "@types/luxon": "^0.2.2",
+      "luxon": "^0.2.12",
+      "pg": "^7.3.0",
       "reflect-metadata": "^0.1.10",
-      "pg": "^7.3.0"
+      "typeorm": "0.1.9"
    }
 }

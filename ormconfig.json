@@ -5,7 +5,6 @@
    "username": "am",
    "database": "hitch_test",
    "synchronize": true,
-   "logging": ["query"],
    "entities": [
       "src/entity/**/*.ts"
    ],
