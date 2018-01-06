@@ -1,12 +1,8 @@
-import "reflect-metadata";
 import { DateTime } from "luxon";
+import "reflect-metadata";
 import { getRepository} from "typeorm";
-import { User } from "../entity/User";
-import { UserAccount } from "../entity/UserAccount";
-import { Reservation } from "../entity/Reservation";
-import { Transport } from "../entity/Transport";
-import { Trip } from "../entity/Trip";
 import { createAccountAsync } from "../commands";
+import { Trip } from "../entity/Trip";
 
 export const createRoundTripListing = async () => {
 

@@ -1,17 +1,19 @@
-import { 
-    Entity, 
-    PrimaryGeneratedColumn, 
-    Column, 
-    OneToOne, 
-    JoinColumn, 
-    CreateDateColumn, 
-    UpdateDateColumn,
+/* tslint:disable:member-access */
+/* tslint:disable:arrow-parens */
+
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    Generated,
     OneToMany,
-    Generated
+    OneToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from "typeorm";
-import { UserAccount } from "./UserAccount";
 import { Reservation } from "./Reservation";
 import { Transport } from "./Transport";
+import { UserAccount } from "./UserAccount";
 
 @Entity({schema: "public"})
 export class User {
@@ -19,7 +21,7 @@ export class User {
     @PrimaryGeneratedColumn("uuid")
     id: number;
 
-    @Column()    
+    @Column()
     @Generated("uuid")
     graphId: number;
 
@@ -31,28 +33,28 @@ export class User {
 
     @CreateDateColumn()
     createdAt: string;
-    
+
     @UpdateDateColumn()
     updatedAt: string;
 
-    @OneToOne(type => UserAccount, 
-    userAccount => userAccount.user, 
+    @OneToOne(type => UserAccount,
+    userAccount => userAccount.user,
     {cascadeAll: true})
     userAccount: UserAccount;
 
-    @OneToMany(type => Reservation, res => res.reservedBy, 
+    @OneToMany(type => Reservation, res => res.reservedBy,
     {cascadeInsert: true})
-    reservations: Reservation[]
+    reservations: Reservation[];
 
-    @OneToMany(type => Reservation, res => res.createdBy, 
+    @OneToMany(type => Reservation, res => res.createdBy,
     {cascadeInsert: true})
-    reservationsCreated: Reservation[]
+    public reservationsCreated: Reservation[];
 
-    @OneToMany(type => Transport, t => t.createdBy, 
+    @OneToMany((type) => Transport, (t) => t.createdBy,
     {cascadeInsert: true})
-    transportsCreated: Transport[]
+    transportsCreated: Transport[];
 
-    @OneToMany(type => Transport, t => t.operatedBy, 
+    @OneToMany((type) => Transport, (t) => t.operatedBy,
     {cascadeInsert: true})
-    transportsOperated: Transport[]
+    public transportsOperated: Transport[];
 }

@@ -1,14 +1,16 @@
-import { 
-    Entity, 
-    PrimaryColumn, 
-    Column, 
-    OneToOne, 
-    JoinColumn, 
-    PrimaryGeneratedColumn, 
-    CreateDateColumn, 
-    UpdateDateColumn, 
-    Generated} from 'typeorm';
-import { User } from './User';
+/* tslint:disable:member-access */
+/* tslint:disable:arrow-parens */
+
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    Generated,
+    JoinColumn,
+    OneToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn} from "typeorm";
+import { User } from "./User";
 
 @Entity({schema: "auth"})
 export class UserAccount {
@@ -16,11 +18,11 @@ export class UserAccount {
     @PrimaryGeneratedColumn("uuid")
     id: number;
 
-    @Column()    
+    @Column()
     @Generated("uuid")
     graphId: number;
 
-    @Column({type:"text", unique: true})
+    @Column({type: "text", unique: true})
     email: string;
 
     @Column({type: "text"})
@@ -28,12 +30,12 @@ export class UserAccount {
 
     @CreateDateColumn()
     createdAt: string;
-    
+
     @UpdateDateColumn()
     updatedAt: string;
 
     @OneToOne(type => User,
     user => user.userAccount)
-    @JoinColumn()    
+    @JoinColumn()
     user: User;
 }

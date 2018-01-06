@@ -3,7 +3,6 @@ import {
     PrimaryGeneratedColumn, 
     Column, 
     OneToOne, 
-    JoinColumn, 
     Generated } from "typeorm";
 import { Leg } from "./Leg";
 

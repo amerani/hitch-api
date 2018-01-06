@@ -1,25 +1,27 @@
-import { 
-    CreateDateColumn, 
-    PrimaryGeneratedColumn, 
-    Column, 
-    ManyToOne, 
-    OneToMany, 
-    UpdateDateColumn, 
+/* tslint:disable:member-access */
+/* tslint:disable:arrow-parens */
+
+import {
+    Column,
+    CreateDateColumn,
     Entity,
+    Generated,
+    ManyToOne,
+    OneToMany,
     OneToOne,
-    Generated
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from "typeorm";
-import { User } from "./User";
-import { Reservation } from "./Reservation";
 import { Leg } from "./Leg";
+import { Reservation } from "./Reservation";
+import { User } from "./User";
 
 @Entity({schema: "public"})
-export class Transport
-{
+export class Transport {
     @PrimaryGeneratedColumn("uuid")
     id: number;
 
-    @Column()    
+    @Column()
     @Generated("uuid")
     graphId: number;
 
@@ -38,15 +40,15 @@ export class Transport
     @Column()
     ymm: string;
 
-    @ManyToOne(type => User, u => u.transportsCreated, 
+    @ManyToOne(type => User, u => u.transportsCreated,
     {cascadeAll: true})
     createdBy: User;
 
-    @ManyToOne(type => User, u => u.transportsOperated, 
+    @ManyToOne(type => User, u => u.transportsOperated,
     {cascadeAll: true})
     operatedBy: User;
 
-    @OneToMany(type => Reservation, r => r.transport, 
+    @OneToMany(type => Reservation, r => r.transport,
     {cascadeInsert: true})
     reservations: Reservation[];
 

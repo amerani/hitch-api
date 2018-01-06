@@ -1,25 +1,27 @@
-import { 
-    Entity, 
-    PrimaryGeneratedColumn, 
-    OneToOne, 
-    Column, 
-    UpdateDateColumn, 
-    CreateDateColumn, 
-    ManyToOne,
+/* tslint:disable:member-access */
+/* tslint:disable:arrow-parens */
+
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
     Generated,
-    JoinColumn} from "typeorm";
+    JoinColumn,
+    ManyToOne,
+    OneToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn} from "typeorm";
 import { Location } from "./Location";
 import { Transport } from "./Transport";
 import { Trip } from "./Trip";
 
-
 @Entity({schema: "public"})
-export class Leg 
-{
-    @PrimaryGeneratedColumn("uuid")
-    id:number;
+export class Leg {
 
-    @Column()    
+    @PrimaryGeneratedColumn("uuid")
+    id: number;
+
+    @Column()
     @Generated("uuid")
     graphId: number;
 
@@ -50,16 +52,15 @@ export class Leg
     @CreateDateColumn()
     createdAt: string;
 
-    @UpdateDateColumn()    
+    @UpdateDateColumn()
     updatedAt: string;
 
-    LogInfo()
-    {
+    LogInfo() {
+        // tslint:disable-next-line:no-console
         console.log(`
         ${this.id}
         ${this.graphId}
         ${this.arrival} - ${this.departure}
-        ${this.origin.city} to ${this.destination.city}\n`)
+        ${this.origin.city} to ${this.destination.city}\n`);
     }
 }
-
