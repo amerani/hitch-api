@@ -4,9 +4,11 @@ import {
     OneToOne, 
     Column, 
     UpdateDateColumn, 
-    CreateDateColumn } from "typeorm";
+    CreateDateColumn, 
+    ManyToOne} from "typeorm";
 import { Location } from "./Location";
 import { Transport } from "./Transport";
+import { Trip } from "./Trip";
 
 
 @Entity({schema: "public"})
@@ -32,6 +34,10 @@ export class Leg
     @OneToOne(type => Transport, t => t.leg,
     {cascadeInsert: true})
     transport: Transport;
+
+    @ManyToOne(type => Trip, t => t.legs,
+    {cascadeInsert: true})
+    trip: Trip;
 
     @CreateDateColumn()
     createdAt: string;
