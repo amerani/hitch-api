@@ -15,7 +15,7 @@ import { Leg } from "./Leg";
 @Entity({schema: "public"})
 export class Transport
 {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     id: number;
 
     @Column()

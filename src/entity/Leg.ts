@@ -14,7 +14,7 @@ import { Trip } from "./Trip";
 @Entity({schema: "public"})
 export class Leg 
 {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     id:number;
 
     @OneToOne(type => Location, l => l.leg,

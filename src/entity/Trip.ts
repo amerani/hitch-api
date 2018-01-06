@@ -1,10 +1,10 @@
-import { PrimaryGeneratedColumn, OneToMany, Entity } from "typeorm";
+import { PrimaryGeneratedColumn, OneToMany, Entity, Generated } from "typeorm";
 import { Leg } from "./Leg";
 
 @Entity({schema:"public"})
 export class Trip 
 {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     id:number;
 
     @OneToMany(type => Leg, l => l.trip,

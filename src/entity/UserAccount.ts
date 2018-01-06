@@ -12,7 +12,7 @@ import { User } from './User';
 @Entity({schema: "auth"})
 export class UserAccount {
 
-    @PrimaryGeneratedColumn({type: "integer"})
+    @PrimaryGeneratedColumn("uuid")
     id: number;
 
     @Column({type:"text", unique: true})

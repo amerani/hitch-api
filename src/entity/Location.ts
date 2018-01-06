@@ -4,7 +4,7 @@ import { Leg } from "./Leg";
 @Entity({schema: "public"})
 export class Location {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     id: number;
 
     @Column()

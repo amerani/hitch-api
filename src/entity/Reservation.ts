@@ -12,7 +12,7 @@ import { Transport } from "./Transport";
 @Entity({schema: "public"})
 export class Reservation {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     id: number;
 
     @Column()

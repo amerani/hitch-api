@@ -15,7 +15,7 @@ import { Transport } from "./Transport";
 @Entity({schema: "public"})
 export class User {
 
-    @PrimaryGeneratedColumn({type: "integer"})
+    @PrimaryGeneratedColumn("uuid")
     id: number;
 
     @Column()
