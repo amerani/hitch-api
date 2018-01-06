@@ -58,6 +58,7 @@ export class Leg
         console.log(`
         ${this.id}
         ${this.graphId}
+        ${this.arrival} - ${this.departure}
         ${this.origin.city} to ${this.destination.city}\n`)
     }
 }
