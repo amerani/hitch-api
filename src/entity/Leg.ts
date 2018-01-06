@@ -6,7 +6,8 @@ import {
     UpdateDateColumn, 
     CreateDateColumn, 
     ManyToOne,
-    Generated} from "typeorm";
+    Generated,
+    JoinColumn} from "typeorm";
 import { Location } from "./Location";
 import { Transport } from "./Transport";
 import { Trip } from "./Trip";
@@ -24,10 +25,12 @@ export class Leg
 
     @OneToOne(type => Location, l => l.leg,
     {cascadeInsert: true})
+    @JoinColumn()
     origin: Location;
 
     @OneToOne(type => Location, l => l.leg,
     {cascadeInsert: true})
+    @JoinColumn()
     destination: Location;
 
     @Column({type: "timestamp with time zone"})
@@ -49,5 +52,13 @@ export class Leg
 
     @UpdateDateColumn()    
     updatedAt: string;
+
+    LogInfo()
+    {
+        console.log(`
+        ${this.id}
+        ${this.graphId}
+        ${this.origin.city} to ${this.destination.city}\n`)
+    }
 }
 

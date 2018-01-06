@@ -21,6 +21,5 @@ export class Location {
     city: string;
 
     @OneToOne(type => Leg)
-    @JoinColumn()
     leg: Leg;
 }
