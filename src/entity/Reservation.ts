@@ -32,12 +32,12 @@ export class Reservation {
     @Column({type: "decimal"})
     price: number;
 
-    @ManyToOne(type => User, user => user.reservationsCreated,
-    {cascadeAll: true})
+    @ManyToOne(type => User, user => user.reservations,
+    {cascadeAll: true, eager: true})
     createdBy: User;
 
-    @ManyToOne(type => User, user => user.reservations,
-    {cascadeAll: true})
+    @ManyToOne(type => User, user => user.reservationsCreated,
+    {cascadeAll: true, eager: true})
     reservedBy: User;
 
     @ManyToOne(type => Transport, t => t.reservations,
