@@ -18,7 +18,7 @@ import { UserAccount } from "./UserAccount";
 @Entity({schema: "public"})
 export class User {
 
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn("increment")
     id: number;
 
     @Column()

@@ -16,7 +16,7 @@ import { User } from "./User";
 @Entity({schema: "public"})
 export class Reservation {
 
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn("increment")
     id: number;
 
     @Column()

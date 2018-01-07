@@ -18,7 +18,7 @@ import { Trip } from "./Trip";
 @Entity({schema: "public"})
 export class Leg {
 
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn("increment")
     id: number;
 
     @Column()

@@ -12,7 +12,7 @@ import { Leg } from "./Leg";
 @Entity({schema: "public"})
 export class Trip {
 
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn("increment")
     id: number;
 
     @Column()

@@ -18,7 +18,8 @@ import { User } from "./User";
 
 @Entity({schema: "public"})
 export class Transport {
-    @PrimaryGeneratedColumn("uuid")
+
+    @PrimaryGeneratedColumn("increment")
     id: number;
 
     @Column()
