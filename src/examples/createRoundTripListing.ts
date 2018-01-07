@@ -1,17 +1,10 @@
 import { DateTime } from "luxon";
-import "reflect-metadata";
 import { getRepository} from "typeorm";
-import { createAccountAsync } from "../commands";
 import { Trip } from "../entity/Trip";
+import { Transport } from "../entity/Transport";
+import { User } from "../entity/User";
 
-export const createRoundTripListing = async () => {
-
-    let user = await createAccountAsync({
-        firstName: "alek",
-        lastName: "merani",
-        email: `${Date.now()}@g.co`,
-        passwordHash: "password"
-    })
+export async function createRoundTripListingAsync(user: User): Promise<Trip> {
 
     const inputModel = getRepository(Trip)
         .merge(new Trip(), {
@@ -81,19 +74,5 @@ export const createRoundTripListing = async () => {
             ]
         })
 
-
-    console.log("--INPUT MODEL--\n");
-    inputModel.legs.map(l => l.LogInfo());
-    
-    const insertedModel = await getRepository(Trip).save(inputModel);
-
-    console.log("--INSERT MODEL--\n");
-    insertedModel.legs.map(l => l.LogInfo());
-
-    const selectedModel = await getRepository(Trip).findOneById(insertedModel.id, {
-        relations: ["legs", "legs.origin", "legs.destination"]
-    });
-
-    console.log("--SELECT MODEL--\n");
-    selectedModel.legs.map(l => l.LogInfo());
+    return getRepository(Trip).save(inputModel);
 }
