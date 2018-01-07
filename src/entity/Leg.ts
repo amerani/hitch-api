@@ -43,6 +43,7 @@ export class Leg {
 
     @OneToOne(type => Transport, t => t.leg,
     {cascadeInsert: true})
+    @JoinColumn()
     transport: Transport;
 
     @ManyToOne(type => Trip, t => t.legs,
