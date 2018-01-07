@@ -50,7 +50,7 @@ export class Transport {
     operatedBy: User;
 
     @OneToMany(type => Reservation, r => r.transport,
-    {cascadeInsert: true})
+    {cascadeInsert: true, eager: true})
     reservations: Reservation[];
 
     @OneToOne(type => Leg, l => l.transport,
