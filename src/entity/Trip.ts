@@ -6,8 +6,12 @@ import {
     Entity,
     Generated,
     OneToMany,
-    PrimaryGeneratedColumn } from "typeorm";
+    PrimaryGeneratedColumn, 
+    OneToOne,
+    JoinColumn,
+    ManyToOne} from "typeorm";
 import { Leg } from "./Leg";
+import { User } from "./User";
 
 @Entity({schema: "public"})
 export class Trip {
@@ -18,6 +22,10 @@ export class Trip {
     @Column()
     @Generated("uuid")
     graphId: number;
+
+    @ManyToOne(type => User, u => u.tripsCreated,
+    {cascadeInsert: true})
+    createdBy: User;
 
     @OneToMany(type => Leg, l => l.trip,
     {cascadeInsert: true})

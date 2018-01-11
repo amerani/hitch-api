@@ -13,6 +13,13 @@ export function readWithCreatedReservations(creatorId: number){
     .getOne();
 }
 
+export async function fetchRiders(tripId: number, legId: number):Promise<User[]> {
+    const trip = await getRepository(Trip).findOneById(tripId, {relations: ["legs", "legs.transport"]});
+    const leg = trip.legs.find(l => l.id == legId);
+    const transport = await getRepository(Transport).findOneById(leg.transport.id);
+    return transport.reservations.map(r => r.reservedBy);
+}
+
 export async function fetchWithOpenReservations(tripId: number): Promise<Trip>{
     const trip = await getRepository(Trip).findOneById(tripId, {relations: ["legs", "legs.transport"]});
     trip.legs = await Promise.all(trip.legs.map(filterReservations));

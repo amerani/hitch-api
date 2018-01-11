@@ -5,8 +5,9 @@ import { createAccountAsync } from "./commands";
 import { Transport } from "./entity/Transport";
 import { Leg } from "./entity/Leg";
 import { Reservation } from "./entity/Reservation";
-import { fetchWithOpenReservations } from "./queries";
+import { fetchWithOpenReservations, fetchRiders } from "./queries";
 import { User } from "./entity/User";
+import { createUserAccount } from "./examples/createUserAccount";
 
 createConnection().then(async connection => {
 
@@ -22,28 +23,20 @@ createConnection().then(async connection => {
     let withRezz = await fetchWithOpenReservations(trip.id);
     console.log(withRezz.legs.map(l => l.transport.reservations.length))
 
-    const rId = withRezz.legs[0].transport.reservations[0].id;
+    const rrepo = getRepository(Reservation);
 
-    const reserver = await createAccountAsync({
-        firstName: "john",
-        lastName: "doe",
-        email: `${Date.now()}@g.co`,
-        passwordHash: "passwoed"
-    })
+    const r1 = withRezz.legs[0].transport.reservations[0].id;
+    const ru1 = await createUserAccount();
 
-    getRepository(Reservation).updateById(rId, {
-        reservedBy: reserver
-    })
+    const r2 = withRezz.legs[0].transport.reservations[1].id;
+    const ru2 = await createUserAccount();
 
-    withRezz = await fetchWithOpenReservations(trip.id);
-    console.log(withRezz.legs.map(l => l.transport.reservations.length))
+    rrepo.updateById(r1, {reservedBy: ru1});
+    rrepo.updateById(r2, {reservedBy: ru2});
 
-    const driver = await getRepository(User).findOneById(user.id, {relations: ["reservations", "reservationsCreated"]});
-    const rider = await getRepository(User).findOneById(reserver.id, {relations: ["reservations", "reservationsCreated"]});
-
-    console.log(`driver: created=${driver.reservationsCreated.length} reserved=${driver.reservations.length}` )
-    console.log(`rider: created=${rider.reservationsCreated.length} reserved=${rider.reservations.length}` )
-
+    const rus = await fetchRiders(trip.id, withRezz.legs[0].id);
+    console.log(rus);
+    
     connection.close();
 
 }).catch(error => {

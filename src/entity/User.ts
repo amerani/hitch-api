@@ -10,10 +10,13 @@ import {
     OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
+    ManyToMany,
+    JoinTable,
 } from "typeorm";
 import { Reservation } from "./Reservation";
 import { Transport } from "./Transport";
 import { UserAccount } from "./UserAccount";
+import { Trip } from "./Trip";
 
 @Entity({schema: "public"})
 export class User {
@@ -57,4 +60,12 @@ export class User {
     @OneToMany((type) => Transport, (t) => t.operatedBy,
     {cascadeInsert: true})
     public transportsOperated: Transport[];
+
+    @OneToMany(type => Trip, t => t.createdBy,
+    {cascadeInsert: true})
+    tripsCreated: Trip[]
+
+    @ManyToMany(type => Trip)
+    @JoinTable()
+    tripsReserved: Trip[]
 }
