@@ -42,7 +42,7 @@ export class User {
 
     @OneToOne(type => UserAccount,
     userAccount => userAccount.user,
-    {cascadeAll: true})
+    {cascadeAll: true, eager: true})
     userAccount: UserAccount;
 
     @OneToMany(type => Reservation, res => res.reservedBy,

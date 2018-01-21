@@ -5,6 +5,14 @@ import { Reservation } from "./entity/Reservation";
 import { Leg } from "./entity/Leg";
 import { Transport } from "./entity/Transport";
 
+export function fetchUserByEmail(email: String): Promise<User> {
+    return getRepository(User)
+        .createQueryBuilder("u")
+        .leftJoinAndSelect("u.userAccount", "ua")
+        .where("ua.email = :email", {email})
+        .getOne();
+}
+
 export function readWithCreatedReservations(creatorId: number){
     return getRepository(User)
     .createQueryBuilder("u")

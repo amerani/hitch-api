@@ -6,6 +6,8 @@ import {graphqlExpress, graphiqlExpress} from "apollo-server-express";
 import {makeExecutableSchema} from "graphql-tools";
 import { Entity } from "typeorm";
 import { createAccountAsync } from "./src/commands";
+import * as bcrypt from "bcrypt";
+import { fetchUserByEmail } from "./src/queries";
 
 createConnection({
     "type": "postgres",
@@ -36,6 +38,7 @@ createConnection({
             firstName: String
             lastName: String
             email: String
+            password: String
         }
 
         type Trip {
@@ -52,7 +55,12 @@ createConnection({
                 firstName: String!
                 lastName: String!
                 email: String!
+                password: String!
             ):User
+            verifyLogin(
+                email: String!
+                password: String!
+            ):Boolean
         }
 
         type schema {
@@ -62,9 +70,10 @@ createConnection({
     `
     const resolvers = {
         Mutation: {
-            createUser: async (root, {firstName, lastName, email}) => {
+            createUser: async (root, {firstName, lastName, email, password}) => {
+                const passwordHash = await bcrypt.hash(password, 10);
                 const user = await createAccountAsync({
-                    firstName, lastName, email, passwordHash: "password"
+                    firstName, lastName, email, passwordHash
                 })
                 return {
                     id: user.graphId,
@@ -72,6 +81,11 @@ createConnection({
                     lastName: user.lastName, 
                     email: user.userAccount.email
                 }
+            },
+            verifyLogin: async (root, {email, password}) => {
+                const user = await fetchUserByEmail(email);
+                const same = await bcrypt.compare(password, user.userAccount.passwordHash);
+                return same;
             }
         }
     }
@@ -90,4 +104,7 @@ createConnection({
         console.log('Go to http://localhost:3000/graphiql to run queries!');
     })
 })
-.catch(getConnection().close)
+.catch(err => {
+    console.log(err);
+    getConnection().close;
+})
