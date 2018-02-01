@@ -9,7 +9,8 @@ import {
     JoinColumn,
     OneToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn} from "typeorm";
+    UpdateDateColumn,
+    Index} from "typeorm";
 import { User } from "./User";
 
 @Entity({schema: "auth"})
@@ -22,7 +23,8 @@ export class UserAccount {
     @Generated("uuid")
     graphId: number;
 
-    @Column({type: "text", unique: true})
+    @Column({type: "text"})
+    @Index({unique:true})
     email: string;
 
     @Column({type: "text"})
