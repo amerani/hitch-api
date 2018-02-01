@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { createConnection, getConnection } from "typeorm";
 import * as express from "express";
 import * as bodyParser from "body-parser";
+import * as cors from "cors";
 import {graphqlExpress, graphiqlExpress} from "apollo-server-express";
 import {makeExecutableSchema} from "graphql-tools";
 import { Entity } from "typeorm";
@@ -48,6 +49,7 @@ createConnection({
 
         type Query {
             trips(id: ID!): Trip
+            user(email: String!): User
         }
 
         type Mutation {
@@ -69,6 +71,17 @@ createConnection({
         }
     `
     const resolvers = {
+        Query: {
+            user: async (root, {email}) => {
+                var user = await fetchUserByEmail(email);
+                return {
+                    id: user.graphId,
+                    firstName: user.firstName,
+                    lastName: user.lastName, 
+                    email: user.userAccount.email
+                }
+            }
+        },
         Mutation: {
             createUser: async (root, {firstName, lastName, email, password}) => {
                 const passwordHash = await bcrypt.hash(password, 10);
@@ -97,7 +110,7 @@ createConnection({
 
     const app = express();
 
-    app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));
+    app.use('/graphql', bodyParser.json(), cors(), graphqlExpress({schema}));
     app.use('/graphiql', graphiqlExpress({endpointURL: 'graphql'}));
 
     app.listen(3000, () => {
