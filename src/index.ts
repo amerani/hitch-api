@@ -18,8 +18,8 @@ createConnection().then(async connection => {
         passwordHash: "password"
     });
 
-    const byEmail = await fetchUserByEmail(user.userAccount.email);
-    console.log(byEmail.userAccount.passwordHash);
+    const byEmail = await fetchUserByEmail("adsfasfasdf");
+    console.log(byEmail);
     // const trip = await createRoundTripListingAsync(user);
 
     // let withRezz = await fetchWithOpenReservations(trip.id);

@@ -13,6 +13,10 @@ export function fetchUserByEmail(email: String): Promise<User> {
         .getOne();
 }
 
+export function fetchUserById(id: number): Promise<User> {
+    return getRepository(User).findOneById(id);
+}
+
 export function readWithCreatedReservations(creatorId: number){
     return getRepository(User)
     .createQueryBuilder("u")

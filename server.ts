@@ -8,7 +8,10 @@ import {makeExecutableSchema} from "graphql-tools";
 import { Entity } from "typeorm";
 import { createAccountAsync } from "./src/commands";
 import * as bcrypt from "bcrypt";
-import { fetchUserByEmail } from "./src/queries";
+import { fetchUserByEmail, fetchUserById } from "./src/queries";
+import * as jwtExpress from 'express-jwt';
+import {JWT_SECRET} from './config';
+import * as jwt from 'jsonwebtoken';
 
 createConnection({
     "type": "postgres",
@@ -40,6 +43,7 @@ createConnection({
             lastName: String
             email: String
             password: String
+            jwt: String
         }
 
         type Trip {
@@ -48,8 +52,8 @@ createConnection({
         }
 
         type Query {
+            user(email: String!):User
             trips(id: ID!): Trip
-            user(email: String!): User
         }
 
         type Mutation {
@@ -63,6 +67,15 @@ createConnection({
                 email: String!
                 password: String!
             ):Boolean
+            signup(
+                email: String!
+                password: String!
+                username: String
+            ):User
+            login(
+                email: String!
+                password: String!
+            ):User
         }
 
         type schema {
@@ -99,6 +112,51 @@ createConnection({
                 const user = await fetchUserByEmail(email);
                 const same = await bcrypt.compare(password, user.userAccount.passwordHash);
                 return same;
+            },
+            signup: async (root, {email, password, username}, ctx) => {
+                const user = await fetchUserByEmail(email);
+                if(!user){
+                    const passwordHash = await bcrypt.hash(password, 10);
+                    const user = await createAccountAsync({
+                        firstName: username, lastName: username, email, passwordHash
+                    })
+                    const { id } = user;
+                    const token = jwt.sign({id, email}, JWT_SECRET);
+                    const u = {
+                        id: user.graphId,
+                        jwt: token,
+                        firstName: user.firstName,
+                        lastName: user.lastName, 
+                        email: user.userAccount.email
+                    }
+                    ctx.user = Promise.resolve(u);
+                    return u;
+                }
+
+                throw new Error('email already exists');
+            },
+            login: async (root, {email, password}, ctx) => {
+                const user = await fetchUserByEmail(email);
+                if(user) {
+                    const same = await bcrypt.compare(password, user.userAccount.passwordHash);
+                    if(same) {
+                        const token = jwt.sign({
+                            id: user.id,
+                            email: user.userAccount.email
+                        }, JWT_SECRET);
+                        const u = {
+                            id: user.graphId,
+                            jwt: token,
+                            firstName: user.firstName,
+                            lastName: user.lastName, 
+                            email: user.userAccount.email
+                        }
+                        ctx.user = Promise.resolve(u);
+                        return u;                        
+                    }
+                    throw new Error('incorrect password')
+                }
+                throw new Error('email not found')
             }
         }
     }
@@ -110,7 +168,21 @@ createConnection({
 
     const app = express();
 
-    app.use('/graphql', bodyParser.json(), cors(), graphqlExpress({schema}));
+    const jwtMiddleware = () => jwtExpress({
+        secret: JWT_SECRET,
+        credentialsRequired: false,
+    });
+   
+    const graphqlExpressMiddleware = () => graphqlExpress((req: any, res) => {
+        return {
+            schema,
+            context: {
+                user: req.user ? fetchUserById(req.user.id) : Promise.resolve(null)
+            }
+        }
+    });
+
+    app.use('/graphql', bodyParser.json(), cors(), jwtMiddleware(), graphqlExpressMiddleware());
     app.use('/graphiql', graphiqlExpress({endpointURL: 'graphql'}));
 
     app.listen(3000, () => {
