@@ -1,7 +1,9 @@
 import {getConnection, getManager, getRepository} from "typeorm";
 import { User } from "./entity/User";
+import { Trip } from "./entity/Trip";
 import { UserAccount } from "./entity/UserAccount";
 import { Reservation, ReservationType } from "./entity/Reservation";
+import { TransportType } from "./entity/Transport";
 
 export async function createAccountAsync(
     {firstName, lastName, email, passwordHash})
@@ -42,6 +44,38 @@ export async function createReservationsBulkAsync(
     }));
 
     return reservationRepo.save(entities);
+}
+
+export async function createMinimalTrip(
+    origin: string,
+    destination: string,
+    arrival: string,
+    departure: string,
+    transportType: TransportType,
+    reservations: CreateReservationModel[]
+    ) : Promise<Trip>
+{
+    const inputModel = getRepository(Trip)
+        .merge(new Trip(), {
+            legs: [
+                {
+                    origin: {
+                        city: origin
+                    },
+                    destination: {
+                        city: destination
+                    },
+                    arrival,
+                    departure,
+                    transport: {
+                        type: transportType,
+                        capacity: reservations.length,
+                        reservations
+                    }
+                }
+            ]
+        });
+    return getRepository(Trip).save(inputModel);
 }
 
 export declare type CreateReservationModel = 
