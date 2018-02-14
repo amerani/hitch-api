@@ -29,17 +29,17 @@ export class Transport {
     @Column()
     type: TransportType;
 
-    @Column()
-    description: string;
+    @Column({type: "text", nullable: true})
+    description: string | null;
 
     @Column()
     capacity: number;
 
-    @Column()
-    plateNumber: string;
+    @Column({type: "text", nullable: true})
+    plateNumber: string | null;
 
-    @Column()
-    ymm: string;
+    @Column({type: "text", nullable: true})
+    ymm: string | null;
 
     @ManyToOne(type => User, u => u.transportsCreated,
     {cascadeAll: true})
