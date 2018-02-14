@@ -6,12 +6,13 @@ import * as cors from "cors";
 import {graphqlExpress, graphiqlExpress} from "apollo-server-express";
 import {makeExecutableSchema} from "graphql-tools";
 import { Entity } from "typeorm";
-import { createAccountAsync } from "./src/commands";
+import { createAccountAsync, createMinimalTrip, CreateReservationModel } from "./src/commands";
 import * as bcrypt from "bcrypt";
 import { fetchUserByEmail, fetchUserById } from "./src/queries";
 import * as jwtExpress from 'express-jwt';
 import {JWT_SECRET} from './config';
 import * as jwt from 'jsonwebtoken';
+import { User } from "./src/entity/User";
 
 createConnection({
     "type": "postgres",
@@ -57,6 +58,14 @@ createConnection({
         }
 
         type Mutation {
+            createMinimalTrip(
+                origin: String!
+                destination: String!
+                arrival: String!
+                departure: String!
+                transportType: String!
+                reservationType: String!         
+            ):Trip
             createUser(
                 firstName: String!
                 lastName: String!
@@ -70,7 +79,7 @@ createConnection({
             signup(
                 email: String!
                 password: String!
-                username: String
+                username: String!
             ):User
             login(
                 email: String!
@@ -157,6 +166,47 @@ createConnection({
                     throw new Error('incorrect password')
                 }
                 throw new Error('email not found')
+            },
+            createMinimalTrip: async (root, {
+                origin,
+                destination,
+                arrival,
+                departure,
+                transportType,
+                reservationType
+            }, ctx) => {
+                const user = await ctx.user;
+                if(!user){
+                    throw new Error('Unauthorized')
+                }
+                const creator: User = new User();
+                creator.id = user.id;
+                const reservations: CreateReservationModel[] = [
+                    {
+                        type: reservationType,
+                        creator,
+                        description: null,
+                        price: 0
+                    }
+                ]
+                var trip = await createMinimalTrip(
+                    origin,
+                    destination,
+                    arrival,
+                    departure,
+                    transportType,
+                    reservations
+                );
+                console.log(trip)
+                return {
+                    id: trip.graphId,
+                    // createdBy: {
+                    //     id: trip.createdBy.graphId,
+                    //     firstName: trip.createdBy.firstName,
+                    //     lastName: trip.createdBy.lastName,
+                    //     email: trip.createdBy.userAccount.email
+                    // }
+                }
             }
         }
     }
@@ -173,11 +223,13 @@ createConnection({
         credentialsRequired: false,
     });
    
-    const graphqlExpressMiddleware = () => graphqlExpress((req: any, res) => {
+    const graphqlExpressMiddleware = () => graphqlExpress(async (req: any, res) => {
+        console.log(req.user);
+        const user = req.user && await fetchUserById(req.user.id);
         return {
             schema,
             context: {
-                user: req.user ? fetchUserById(req.user.id) : Promise.resolve(null)
+                user: user || Promise.resolve(null)
             }
         }
     });
