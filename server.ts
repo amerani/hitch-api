@@ -10,32 +10,12 @@ import { createAccountAsync, createMinimalTrip, CreateReservationModel } from ".
 import * as bcrypt from "bcrypt";
 import { fetchUserByEmail, fetchUserById } from "./src/queries";
 import * as jwtExpress from 'express-jwt';
-import {JWT_SECRET} from './config';
+import { JWT_SECRET } from './config';
 import * as jwt from 'jsonwebtoken';
 import { User } from "./src/entity/User";
+import { typeorm } from "./connectionFactory";
 
-createConnection({
-    "type": "postgres",
-    "host": "localhost",
-    "port": 5432,
-    "username": "am",
-    "database": "hitch_test",
-    "synchronize": true,
-    "entities": [
-       "src/entity/**/*.ts"
-    ],
-    "migrations": [
-       "src/migration/**/*.ts"
-    ],
-    "subscribers": [
-       "src/subscriber/**/*.ts"
-    ],
-    "cli": {
-       "entitiesDir": "src/entity",
-       "migrationsDir": "src/migration",
-       "subscribersDir": "src/subscriber"
-    }
- }).then(() => {
+createConnection(typeorm()).then(() => {
 
         const typeDefs = `
         type User {

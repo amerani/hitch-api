@@ -1,9 +1,9 @@
 #!/bin/zsh
 
-dbs=("hitch_app" "hitch_test")
-host="localhost"
-port="5432"
-username="am"
+dbs=($PG_DATABASE)
+host=$PG_HOST
+port=$PG_PORT
+username=$PG_USERNAME
 
 for db in $dbs; do
     #create db
@@ -11,7 +11,7 @@ for db in $dbs; do
     createdb ${db} --host=${host} --port=${port} --username=${username} --no-password
 
     #create schemas
-    psql --dbname=${db} --command='create schema auth'
+    psql --host=${host} --port=${port} --username=${username} --dbname=${db} --command='create schema auth'
 done
 
 exit
