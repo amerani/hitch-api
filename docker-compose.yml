@@ -8,12 +8,10 @@ services:
     build: .
     command: bash -c "npm install && npm run serve"
     working_dir: /home/node/app
-    environment:
-      - NODE_ENV=docker
     volumes:
       - ./:/home/node/app
     ports:
-      - 3000:3000
+      - $API_PORT:$API_PORT
     depends_on:
       - db
 
@@ -22,7 +20,7 @@ services:
     image: postgres
     restart: always
     ports:
-      - 5432:5432
+      - 5432:$PG_PORT
     volumes:
       - pgdata:/var/lib/postgresql/data
 

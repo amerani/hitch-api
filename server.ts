@@ -216,8 +216,8 @@ createConnection(typeorm()).then(() => {
     app.use('/graphql', bodyParser.json(), cors(), jwtMiddleware(), graphqlExpressMiddleware());
     app.use('/graphiql', graphiqlExpress({endpointURL: 'graphql'}));
 
-    app.listen(8080, () => {
-        console.log('Go to http://localhost:8080/graphiql to run queries!');
+    app.listen(process.env.API_PORT, () => {
+        console.log(`Go to http://localhost:${process.env.API_PORT}/graphiql to run queries!`);
     })
 })
 .catch(err => {

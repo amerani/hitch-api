@@ -4,12 +4,12 @@ dotenv.config({ silent: true });
 
 export const {
   JWT_SECRET,
+  PG_HOST,
   PG_PORT,
   PG_USERNAME,
-  PG_DATABASE,  
+  PG_DATABASE,
+  API_PORT
 } = process.env;
-
-export let { PG_HOST } = process.env;
 
 const defaults = {
   JWT_SECRET: 'JWT_SECRET',
@@ -24,10 +24,6 @@ Object.keys(defaults).forEach((key) => {
     throw new Error(`Please enter a custom ${key} in .env on the root directory`);
   }
 });
-
-if(process.env.NODE_ENV == 'docker') {
-  PG_HOST = 'db'
-}
 
 export default {
   JWT_SECRET,
