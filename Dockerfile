@@ -10,4 +10,4 @@ RUN npm install
 
 EXPOSE 3000
 
-CMD [ "./initDb.sh", "&&", "npm", "run", "serve" ]
+CMD [ "npm", "run", "serve" ]
