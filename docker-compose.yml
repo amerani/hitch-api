@@ -1,6 +1,21 @@
 version: '3.1'
 
 services:
+  api:
+    container_name: hitch-api
+    image: node
+    restart: always
+    build: .
+    command: bash -c "npm install && npm run serve"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=docker
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
 
   db:
     container_name: hitch-pg
