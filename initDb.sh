@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 dbs=($PG_DATABASE)
 host=$PG_HOST
