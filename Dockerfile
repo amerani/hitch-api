@@ -1,8 +1,10 @@
-FROM node:alpine
+FROM node:latest
 
 WORKDIR /home/node/app
 
 COPY . /home/node/app
+
+RUN npm install -g typescript
 
 RUN npm install -g ts-node
 
