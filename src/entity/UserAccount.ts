@@ -25,6 +25,10 @@ export class UserAccount {
 
     @Column({type: "text"})
     @Index({unique:true})
+    userName: string;
+
+    @Column({type: "text"})
+    @Index({unique:true})
     email: string;
 
     @Column({type: "text"})

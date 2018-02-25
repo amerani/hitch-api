@@ -51,4 +51,4 @@ export class Reservation {
     updatedAt: string;
 }
 
-export declare type ReservationType = "seat" | "bed" | "recliner";
+export declare type ReservationType = "SEAT" | "BED" | "RECLINER";

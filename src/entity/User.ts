@@ -28,11 +28,11 @@ export class User {
     @Generated("uuid")
     graphId: number;
 
-    @Column()
-    firstName: string;
+    @Column({type: "text", nullable: true})
+    firstName: string | null;
 
-    @Column()
-    lastName: string;
+    @Column({type: "text", nullable: true})
+    lastName: string | null;
 
     @CreateDateColumn()
     createdAt: string;

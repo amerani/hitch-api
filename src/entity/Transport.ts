@@ -64,4 +64,4 @@ export class Transport {
     updatedAt: string;
 }
 
-export declare type TransportType = "car" | "bus" | "rv";
+export declare type TransportType = "CAR" | "BUS" | "RV";
