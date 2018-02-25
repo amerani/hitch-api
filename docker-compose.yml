@@ -23,6 +23,9 @@ services:
       - 5432:$PG_PORT
     volumes:
       - pgdata:/var/lib/postgresql/data
+    environment: 
+      - POSTGRES_DB=hitch_app
+      - POSTGRES_USER=postgres
 
 volumes:
   pgdata:
