@@ -1,6 +1,6 @@
-import { fetchUserByEmail } from "./src/queries";
-import { createAccountAsync } from "./src/commands";
-import { JWT_SECRET } from './config';
+import { fetchUserByEmail } from "../src/queries";
+import { createAccountAsync } from "../src/commands";
+import { JWT_SECRET } from '../config';
 import * as bcrypt from "bcrypt";
 import * as jwt from 'jsonwebtoken';
 
@@ -32,7 +32,8 @@ export const resolver = {
                         jwt: token,
                         firstName: user.firstName,
                         lastName: user.lastName, 
-                        email: user.userAccount.email
+                        email: user.userAccount.email,
+                        userName: user.userAccount.userName
                     }
                     ctx.user = Promise.resolve(u);
                     return u;                        

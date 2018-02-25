@@ -1,5 +1,7 @@
-import { schema as user } from "./UserModel";
-import { schema as login } from "./login";
-import { schema as signup } from "./signup";
+import { schema as models } from "./models";
+import { schemas as mutations } from "./mutations/schemas";
 
-export const schemas = [...user, ...login, ...signup];
+export const schemas = [
+    ...models,
+    ...mutations
+];

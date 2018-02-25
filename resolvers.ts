@@ -1,5 +1,4 @@
 import { merge } from "lodash";
-import { resolver as login } from "./login";
-import { resolver as signup } from "./signup";
+import { resolvers as mutations } from "./mutations/resolvers";
 
-export const resolvers = merge(login, signup);
+export const resolvers = merge(mutations);

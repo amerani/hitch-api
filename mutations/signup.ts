@@ -1,6 +1,6 @@
-import { fetchUserByEmail } from "./src/queries";
-import { createAccountAsync } from "./src/commands";
-import { JWT_SECRET } from './config';
+import { fetchUserByEmail } from "../src/queries";
+import { createAccountAsync } from "../src/commands";
+import { JWT_SECRET } from '../config';
 import * as bcrypt from "bcrypt";
 import * as jwt from 'jsonwebtoken';
 
@@ -8,9 +8,11 @@ export const schema = [
     `
         extend type Mutation {
             signup(
-                username: String
                 email: String!
                 password: String!
+                userName: String
+                firstName: String
+                lastName: String
             ):User
         }    
     `
@@ -18,12 +20,19 @@ export const schema = [
 
 export const resolver = {
     Mutation: {
-        signup: async (root, {email, password, username}, ctx) => {
+        signup: async (root, props, ctx) => {
+            const {
+                email, 
+                password,
+                userName,
+                firstName,
+                lastName
+            } = props;
             const user = await fetchUserByEmail(email);
             if(!user){
                 const passwordHash = await bcrypt.hash(password, 10);
                 const user = await createAccountAsync({
-                    firstName: username, lastName: username, email, passwordHash
+                    firstName, lastName, email, userName, passwordHash
                 })
                 const { id } = user;
                 const token = jwt.sign({id, email}, JWT_SECRET);
@@ -32,7 +41,8 @@ export const resolver = {
                     jwt: token,
                     firstName: user.firstName,
                     lastName: user.lastName, 
-                    email: user.userAccount.email
+                    email: user.userAccount.email,
+                    userName: user.userAccount.userName
                 }
                 ctx.user = Promise.resolve(u);
                 return u;
