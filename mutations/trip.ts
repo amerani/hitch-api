@@ -1,7 +1,9 @@
 import { User } from "../src/entity/User";
 import { fetchUserByEmail } from "../src/queries";
-import { CreateReservationModel, createMinimalTrip } from "../src/commands";
+import { createMinimalTrip, CreateReservationModel } from "../src/commands";
 import { IResolvers, ITypeDefinitions } from "graphql-tools/dist/Interfaces";
+import { toUserModel, toTripModel } from "../transformers";
+import { ReservationModel } from "../models";
 
 export const schema : ITypeDefinitions = [
     `
@@ -41,11 +43,10 @@ export const resolver : IResolvers = {
                 reservationType
             } = args;
             
-            const reservations: CreateReservationModel[] = [
+            const reservations: any = [
                 {
                     type: reservationType,
-                    creator: domainUser,
-                    description: null,
+                    createdBy: domainUser,
                     price: 0
                 }
             ];
@@ -59,39 +60,7 @@ export const resolver : IResolvers = {
                 reservations
             );
 
-            return {
-                id: trip.graphId,
-                createdBy: {
-                    id: trip.createdBy.graphId,
-                    userName: trip.createdBy.userAccount.userName,
-                    email: trip.createdBy.userAccount.email
-                },
-                legs: trip.legs.map(l => {
-                    return {
-                        id: l.graphId,
-                        origin: {
-                            id: l.origin.graphId,
-                            city: l.origin.city                            
-                        },
-                        destination: {
-                            id: l.destination.graphId,
-                            city: l.destination.city
-                        },
-                        arrival: l.arrival,
-                        departure: l.departure,
-                        transport: {
-                            id: l.transport.graphId,
-                            type: l.transport.type,
-                            reservations: l.transport.reservations.map(r => {
-                                return {
-                                    id: r.graphId,
-                                    type: r.type
-                                }
-                            })
-                        }
-                    }
-                })
-            }
+            return toTripModel(trip);
         }
     }
 }

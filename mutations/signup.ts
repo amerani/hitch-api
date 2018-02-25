@@ -3,6 +3,8 @@ import { createAccountAsync } from "../src/commands";
 import { JWT_SECRET } from '../config';
 import * as bcrypt from "bcrypt";
 import * as jwt from 'jsonwebtoken';
+import { UserModel } from "../models";
+import { toUserModel } from "../transformers";
 
 export const schema = [
     `
@@ -36,14 +38,7 @@ export const resolver = {
                 })
                 const { id } = user;
                 const token = jwt.sign({id, email}, JWT_SECRET);
-                const u = {
-                    id: user.graphId,
-                    jwt: token,
-                    firstName: user.firstName,
-                    lastName: user.lastName, 
-                    email: user.userAccount.email,
-                    userName: user.userAccount.userName
-                }
+                const u : UserModel = toUserModel(user, token);
                 ctx.user = Promise.resolve(u);
                 return u;
             }

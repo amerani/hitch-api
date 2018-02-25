@@ -4,6 +4,7 @@ import { Trip } from "./entity/Trip";
 import { UserAccount } from "./entity/UserAccount";
 import { Reservation, ReservationType } from "./entity/Reservation";
 import { TransportType } from "./entity/Transport";
+import { ReservationModel } from "../models";
 
 export async function createAccountAsync(
     {firstName, lastName, email, userName, passwordHash})
@@ -54,12 +55,12 @@ export async function createMinimalTrip(
     arrival: string,
     departure: string,
     transportType: TransportType,
-    reservations: CreateReservationModel[]
+    reservations: ReservationModel[]
     ) : Promise<Trip>
 {
     const inputModel = getRepository(Trip)
         .merge(new Trip(), {
-            createdBy: reservations[0].creator,
+            createdBy: reservations[0].createdBy,
             legs: [
                 {
                     origin: {

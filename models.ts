@@ -1,9 +1,12 @@
+import { ReservationType } from "./src/entity/Reservation";
+import { TransportType } from "./src/entity/Transport";
+
 export const schema = [
     `
         type User {
             id: ID!
             userName: String
-            email: String
+            email: String!
             firstName: String
             lastName: String
             jwt: String
@@ -62,3 +65,52 @@ export const schema = [
         }
     `
 ]
+
+export type UserModel = {
+    id: number,
+    userName: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    jwt: string
+}
+
+export type LocationModel = {
+    id: number,
+    city: string
+}
+
+export type ReservationModel = {
+    id: number, 
+    type: ReservationType,
+    description: string,
+    createdBy: UserModel,
+    reservedBy: UserModel
+}
+
+export type TransportModel = {
+    id: number,
+    type: TransportType,
+    description: string,
+    capacity: number,
+    plateNumber: string,
+    ymm: string,
+    createdBy: UserModel,
+    operatedBy: UserModel,
+    reservations: ReservationModel[]
+}
+
+export type LegModel = {
+    id: number,
+    origin: LocationModel,
+    destination: LocationModel,
+    arrival: string,
+    departure: string,
+    transport: TransportModel
+}
+
+export type TripModel = {
+    id: number,
+    createdBy: UserModel,
+    legs: LegModel[]
+}
