@@ -1,0 +1,23 @@
+api:
+  autoredeploy: true
+  environment:
+    - API_PORT=80
+    - JWT_SECRET=emptyString
+    - PG_DATABASE=hitch_app
+    - PG_HOST=db
+    - PG_PORT=5432
+    - PG_USERNAME=postgres
+  expose:
+    - '80'
+  image: 'alekmerani/hitch:latest'
+  ports:
+    - '80:80'
+  restart: always
+db:
+  autoredeploy: true
+  environment:
+    - POSTGRES_DB=hitch_app
+  image: 'postgres:latest'
+  ports:
+    - '5432:5432'
+  restart: always
