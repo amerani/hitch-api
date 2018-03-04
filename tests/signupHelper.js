@@ -1,4 +1,5 @@
 const gql = require('graphql-tag');
+const {DateTime} = require('luxon');
 
 module.exports = async function(email, password) {
     const query = gql`
@@ -9,6 +10,9 @@ module.exports = async function(email, password) {
             }
         }
     `;
+
+    email = email || `${DateTime.utc().toString()}@hitch.cool`;
+    password = password || "password";
 
     const response = await global.Client.mutate({
         mutation: query,
