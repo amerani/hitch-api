@@ -3,8 +3,8 @@ const { DateTime } = require('luxon');
 
 test('should signup with email and password', async () => {
     const query = gql`
-        mutation($email: String!) {
-            signup(email: $email, password: "password") {
+        mutation($input: SignupInput!) {
+            signup(input: $input) {
                 id,
                 jwt
             }
@@ -15,7 +15,10 @@ test('should signup with email and password', async () => {
     const response = await global.Client.mutate({
         mutation: query,
         variables: {
-            email
+            input: {
+                email,
+                password: "password"
+            }
         }
     })
 

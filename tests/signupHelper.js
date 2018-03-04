@@ -4,7 +4,7 @@ const {DateTime} = require('luxon');
 module.exports = async function(email, password) {
     const query = gql`
         mutation($email: String!, $password: String!) {
-            signup(email: $email, password: $password) {
+            signup(input:{email: $email, password: $password}) {
                 id,
                 jwt
             }

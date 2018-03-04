@@ -9,14 +9,16 @@ import { toUserModel } from "../transformers";
 export const schema = [
     `
         extend type Mutation {
-            signup(
-                email: String!
-                password: String!
-                userName: String
-                firstName: String
-                lastName: String
-            ):User
-        }    
+            signup(input: SignupInput!):User
+        }
+
+        input SignupInput {
+            email: String!
+            password: String!
+            userName: String
+            firstName: String
+            lastName: String
+        }
     `
 ]
 
@@ -29,7 +31,7 @@ export const resolver = {
                 userName,
                 firstName,
                 lastName
-            } = props;
+            } = props.input;
             const user = await fetchUserByEmail(email);
             if(!user){
                 const passwordHash = await bcrypt.hash(password, 10);
