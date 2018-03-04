@@ -59,6 +59,7 @@ createConnection(typeorm()).then(() => {
     });
    
     const graphqlExpressMiddleware = () => graphqlExpress(async (req: any, res) => {
+        console.log(req.body)
         const user = req.user && await fetchUserById(req.user.id);
         return {
             schema: executableSchema,

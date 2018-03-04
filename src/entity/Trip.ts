@@ -1,5 +1,4 @@
 /* tslint:disable:member-access */
-/* tslint:disable:arrow-parens */
 
 import {
     Column,
@@ -23,11 +22,11 @@ export class Trip {
     @Generated("uuid")
     graphId: number;
 
-    @ManyToOne(type => User, u => u.tripsCreated,
+    @ManyToOne((type) => User, (u) => u.tripsCreated,
     {cascadeInsert: true, eager: true})
     createdBy: User;
 
-    @OneToMany(type => Leg, l => l.trip,
+    @OneToMany((type) => Leg, (l) => l.trip,
     {cascadeInsert: true})
     legs: Leg[];
 }

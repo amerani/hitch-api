@@ -3,9 +3,7 @@ const createUser = require("./signupHelper");
 const {DateTime} = require("luxon");
 
 test('should create minimal trip', async () => {
-    const email = `${DateTime.utc().toString()}@hitch.cool`;
-    const password = "password";
-    const user = await createUser(email, password);
+    const user = await createUser();
 
     const mutation = gql`
         mutation {
