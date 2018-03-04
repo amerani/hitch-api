@@ -8,15 +8,14 @@ test('should create minimal trip', async () => {
     const user = await createUser(email, password);
 
     const mutation = gql`
-        mutation ($email: String!) {
+        mutation {
             createMinimalTrip (
                 origin: "Austin",
                 destination: "New York",
                 arrival:"2013-02-04T18:35:24+00:00",
                 departure: "2013-02-04T18:35:24+00:00",
                 transportType: CAR,
-                reservationType: SEAT,
-                email: $email
+                reservationType: SEAT
             ) {
                 id
                 legs {
@@ -34,10 +33,13 @@ test('should create minimal trip', async () => {
 
     const res = await Client.mutate({
         mutation,
-        variables: {
-            email
+        context: {
+            headers: {
+                authorization: `Bearer ${user.jwt}`
+            }
         }
     })
+
     const trip = res.data.createMinimalTrip;
     expect(trip.id).not.toBeNull();
     expect(trip.legs[0].id).not.toBeNull();

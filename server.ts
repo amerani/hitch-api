@@ -55,7 +55,7 @@ createConnection(typeorm()).then(() => {
 
     const jwtMiddleware = () => jwtExpress({
         secret: JWT_SECRET,
-        credentialsRequired: false,
+        credentialsRequired: false
     });
    
     const graphqlExpressMiddleware = () => graphqlExpress(async (req: any, res) => {

@@ -15,7 +15,6 @@ export const schema : ITypeDefinitions = [
                 departure: String!
                 transportType: TRANSPORT_TYPE!
                 reservationType: RESERVATION_TYPE!
-                email: String!
             ):Trip
         }
     `
@@ -25,14 +24,12 @@ export const resolver : IResolvers = {
     Mutation: {
         createMinimalTrip: async (root, args, ctx) => {
             
-            // const userContext = await ctx.user;
-            // if(!userContext) {
-            //     throw new Error("Unauthorized");
-            // }
+            const userContext = await ctx.user;
+            if(!userContext) {
+                throw new Error("Unauthorized");
+            }
 
-            // const domainUser = await fetchUserByEmail(userContext.email);
-
-            const domainUser = await fetchUserByEmail(args.email);
+            const domainUser = await fetchUserByEmail(userContext.email);
 
             const {
                 origin,
