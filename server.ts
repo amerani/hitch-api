@@ -59,7 +59,6 @@ createConnection(typeorm()).then(() => {
     });
    
     const graphqlExpressMiddleware = () => graphqlExpress(async (req: any, res) => {
-        console.log(req.body)
         const user = req.user && await fetchUserById(req.user.id);
         return {
             schema: executableSchema,
@@ -69,7 +68,20 @@ createConnection(typeorm()).then(() => {
         }
     });
 
-    app.use('/graphql', bodyParser.json(), cors(), jwtMiddleware(), graphqlExpressMiddleware());
+    const requestLogger: express.RequestHandler = (req, res, next) => {
+        console.log("REQUEST BODY\n", req.body, "\n")
+        next();
+    } 
+
+    const middlewares: express.RequestHandler[] = [
+        bodyParser.json(),
+        cors(),
+        requestLogger,
+        jwtMiddleware(),
+        graphqlExpressMiddleware()
+    ]
+
+    app.use('/graphql', ...middlewares);
     app.use('/graphiql', graphiqlExpress({endpointURL: 'graphql'}));
 
     app.listen(process.env.API_PORT, () => {

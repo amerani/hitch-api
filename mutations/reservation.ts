@@ -2,6 +2,7 @@ import { getRepository } from "typeorm";
 import { Transport } from "../src/entity/Transport";
 import { Reservation } from "../src/entity/Reservation";
 import { toTransportModel } from "../transformers";
+import { fetchUserByEmail } from "../src/queries";
 
 export const schema = [
     `
@@ -18,6 +19,14 @@ export const schema = [
 export const resolver = {
     Mutation: {
         createReservation: async(root, props, ctx) => {
+            
+            const userContext = await ctx.user;
+            if(!userContext) {
+                throw new Error("Unauthorized");
+            }
+
+            const domainUser = await fetchUserByEmail(userContext.email);
+
             const {transportId, type, description} = props;
             const repo = getRepository(Transport);
             const transport = await repo.findOne({
@@ -30,6 +39,8 @@ export const resolver = {
             reservation.type = type;
             reservation.description = description;
             reservation.price = 0;
+            reservation.createdBy = domainUser;
+
             const resRepo = getRepository(Reservation);
             const saved = await resRepo.save(reservation);
 
