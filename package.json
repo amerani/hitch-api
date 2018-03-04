@@ -4,11 +4,12 @@
    "description": "Hitch hiking for modern hippies Long distance ride sharing for believers of humanity",
    "main": "index.js",
    "scripts": {
-      "test": "jest --forceExit",
+      "test": "jest --forceExit --verbose",
       "start": "ts-node src/index.ts",
       "lint": "tslint -c tslint.json 'src/**/*.ts'",
       "serve": "ts-node server.ts",
-      "ts": "ts-node"
+      "ts-node": "ts-node",
+      "watch-server": "nodemon --exec ts-node ./server.ts"
    },
    "jest": {
       "globalSetup": "./tests/globalSetup.js",
@@ -26,8 +27,12 @@
    "homepage": "https://gitlab.com/project-hitch/hitch#README",
    "devDependencies": {
       "@types/node": "^8.0.29",
+      "nodemon": "^1.17.1",
       "ts-node": "3.3.0",
-      "typescript": "2.5.2"
+      "typescript": "2.5.2",
+      "jest": "^22.4.2",
+      "tslint": "^5.8.0"
+      
    },
    "dependencies": {
       "@types/body-parser": "^1.16.8",
@@ -49,7 +54,6 @@
       "graphql": "^0.12.3",
       "graphql-tag": "^2.8.0",
       "graphql-tools": "^2.18.0",
-      "jest": "^22.4.2",
       "jsonwebtoken": "^8.1.1",
       "lodash": "^4.17.5",
       "luxon": "^0.5.3",
@@ -57,7 +61,6 @@
       "pg": "^7.3.0",
       "reflect-metadata": "^0.1.10",
       "request-promise": "^4.2.2",
-      "tslint": "^5.8.0",
       "typeorm": "0.1.9"
    }
 }
