@@ -1,6 +1,7 @@
 import { getRepository } from "typeorm";
 import { Transport } from "../src/entity/Transport";
 import { Reservation } from "../src/entity/Reservation";
+import { toTransportModel } from "../transformers";
 
 export const schema = [
     `
@@ -9,7 +10,7 @@ export const schema = [
                 transportId: ID!
                 type: RESERVATION_TYPE!
                 description: String
-            ):String
+            ):Transport
         }
     `
 ]
@@ -36,7 +37,7 @@ export const resolver = {
 
             const savedTransport = await repo.save(transport);
 
-            return JSON.stringify(savedTransport)
+            return toTransportModel(savedTransport);
         }
     }
 }
