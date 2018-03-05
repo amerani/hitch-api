@@ -36,7 +36,7 @@ export const schema = [
             ymm: String
             createdBy: User
             operatedBy: User
-            reservations: [Reservation]!
+            reservations: [Reservation]
         }
 
         type Reservation {

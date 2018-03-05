@@ -23,6 +23,7 @@ export const toUserModel =
 
 export const toLocationModel = 
     function(location: Location) : LocationModel {
+        if(location == null) return null;
         return {
             id: location.graphId,
             city: location.city
@@ -43,6 +44,7 @@ export const toLegModel =
 
 export const toTransportModel =
     function(transport: Transport): TransportModel {
+        if(transport == null) return null;
         return {
             id: transport.graphId,
             type: transport.type,
@@ -52,7 +54,7 @@ export const toTransportModel =
             ymm: transport.ymm,
             createdBy: toUserModel(transport.createdBy, null),
             operatedBy: toUserModel(transport.operatedBy, null),            
-            reservations: transport.reservations.map(toReservationModel)
+            reservations: transport.reservations && transport.reservations.map(toReservationModel)
         }
     }
 

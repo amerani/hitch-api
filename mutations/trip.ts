@@ -1,5 +1,5 @@
 import { User } from "../src/entity/User";
-import { fetchUserByEmail } from "../src/queries";
+import { fetchUserById } from "../src/queries";
 import { createMinimalTrip, CreateReservationModel } from "../src/commands";
 import { IResolvers, ITypeDefinitions } from "graphql-tools/dist/Interfaces";
 import { toUserModel, toTripModel } from "../transformers";
@@ -29,7 +29,7 @@ export const resolver : IResolvers = {
                 throw new Error("Unauthorized");
             }
 
-            const domainUser = await fetchUserByEmail(userContext.email);
+            const domainUser = await fetchUserById(userContext.id);
 
             const {
                 origin,

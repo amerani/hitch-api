@@ -39,6 +39,8 @@ test('should create minimal trip', async () => {
     })
 
     const trip = res.data.createMinimalTrip;
+
+    console.log("TripId: " + trip.id);
     expect(trip.id).not.toBeNull();
     expect(trip.legs[0].id).not.toBeNull();
     expect(trip.legs[0].transport.id).not.toBeNull();
