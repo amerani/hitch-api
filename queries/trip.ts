@@ -1,11 +1,28 @@
 import { getRepository } from "typeorm";
 import { Trip } from "../src/entity/Trip";
 import { toTripModel } from "../transformers";
+import { Leg } from "../src/entity/Leg";
+import { Transport } from "../src/entity/Transport";
+import { fetchByGraphIdWithOpenReservations } from "../src/queries";
 
 export const schema = [
     `
+        type OpenTrip {
+            id: ID!
+            createdBy: User
+            legs: [Leg]!
+        }
+
+        type OpenLeg {
+            id: ID!
+            origin: Location!
+            destination: Location!
+            arrival: String!
+            departure: String!
+        }
+
         extend type Query {
-            trips(pageNum: Int, pageSize: Int): [Trip]
+            trips(skip: Int, take: Int): [OpenTrip]
             trip(id: ID!):Trip
         }
     `
@@ -15,16 +32,16 @@ export const resolver = {
     Query: {
         trips: async (root, args, ctx) => {
             const {
-                pageNum,
-                pageSize
+                skip,
+                take
             } = args
 
             const repo = getRepository(Trip);
 
             const trips = await repo.find({
-                skip: pageNum || 0,
-                take: pageSize || 10,
-                relations: ["legs", "legs.origin", "legs.destination", "legs.transport"]
+                skip: skip || 0,
+                take: take || 10,
+                relations: ["legs", "legs.origin", "legs.destination"]
             })
 
             return trips.map(t => toTripModel(t))
@@ -33,12 +50,7 @@ export const resolver = {
         trip: async (root, args, ctx) => {
             const { id } = args;
 
-            const repo = getRepository(Trip);
-
-            const trip = await repo.findOne({
-                where: { graphId : id },
-                relations: ["legs", "legs.origin", "legs.destination", "legs.transport"]
-            })
+            const trip = await fetchByGraphIdWithOpenReservations(id);
 
             return toTripModel(trip);
         }

@@ -14,7 +14,6 @@ module.exports = async function(email, password) {
     email = email || `${DateTime.utc().toString()}@hitch.cool`;
     password = password || "password";
 
-    console.log(email)
     const response = await global.Client.mutate({
         mutation: query,
         variables: {

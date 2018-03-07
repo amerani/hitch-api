@@ -38,6 +38,15 @@ export async function fetchWithOpenReservations(tripId: number): Promise<Trip>{
     return trip;
 }
 
+export async function fetchByGraphIdWithOpenReservations(graphId: number): Promise<Trip>{
+    const trip = await getRepository(Trip).findOne({
+        where: {graphId},
+        relations: ["legs", "legs.transport", "legs.origin", "legs.destination"]
+    });
+    trip.legs = await Promise.all(trip.legs.map(filterReservations));
+    return trip;
+}
+
 async function filterReservations(leg: Leg): Promise<Leg> {
     const rezz = await getOpenReservations(leg);
     leg.transport.reservations = rezz;

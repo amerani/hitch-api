@@ -43,6 +43,8 @@ test('should create minimal trip', async () => {
 
     const trip = res.data.createMinimalTrip;
 
+    console.log("Trip ID: ", trip.id);
+
     expect(trip.id).not.toBeNull();
     expect(trip.createdBy.id).toEqual(user.id);
     expect(trip.legs[0].id).not.toBeNull();
