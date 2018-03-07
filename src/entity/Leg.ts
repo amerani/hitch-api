@@ -46,8 +46,7 @@ export class Leg {
     @JoinColumn()
     transport: Transport;
 
-    @ManyToOne(type => Trip, t => t.legs,
-    {cascadeInsert: true})
+    @ManyToOne(type => Trip, t => t.legs)
     trip: Trip;
 
     @CreateDateColumn()
