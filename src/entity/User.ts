@@ -45,24 +45,10 @@ export class User {
     {cascadeAll: true, eager: true})
     userAccount: UserAccount;
 
-    @OneToMany(type => Reservation, res => res.reservedBy,
-    {cascadeInsert: true})
+    @OneToMany(type => Reservation, res => res.reservedBy)
     reservations: Reservation[];
 
-    @OneToMany(type => Reservation, res => res.createdBy,
-    {cascadeInsert: true})
-    public reservationsCreated: Reservation[];
-
-    @OneToMany((type) => Transport, (t) => t.createdBy,
-    {cascadeInsert: true})
-    transportsCreated: Transport[];
-
-    @OneToMany((type) => Transport, (t) => t.operatedBy,
-    {cascadeInsert: true})
-    public transportsOperated: Transport[];
-
-    @OneToMany(type => Trip, t => t.createdBy,
-    {cascadeInsert: true})
+    @OneToMany(type => Trip, t => t.createdBy)
     tripsCreated: Trip[]
 
     @ManyToMany(type => Trip)

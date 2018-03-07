@@ -30,7 +30,6 @@ export async function createReservationAsync(
             type,
             description,
             price,
-            createdBy: creator
         });
         return reservationRepo.save(reservation);
 }
@@ -43,7 +42,6 @@ export async function createReservationsBulkAsync(
         type: r.type,
         description: r.description,
         price: r.price,
-        createdBy: r.creator
     }));
 
     return reservationRepo.save(entities);
@@ -55,12 +53,13 @@ export async function createMinimalTrip(
     arrival: string,
     departure: string,
     transportType: TransportType,
-    reservations: ReservationModel[]
+    reservations: ReservationModel[],
+    user: User
     ) : Promise<Trip>
 {
     const inputModel = getRepository(Trip)
         .merge(new Trip(), {
-            createdBy: reservations[0].createdBy,
+            createdBy: user,
             legs: [
                 {
                     origin: {

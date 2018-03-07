@@ -52,8 +52,6 @@ export const toTransportModel =
             capacity: transport.capacity,
             plateNumber: transport.plateNumber,
             ymm: transport.ymm,
-            createdBy: toUserModel(transport.createdBy, null),
-            operatedBy: toUserModel(transport.operatedBy, null),            
             reservations: transport.reservations && transport.reservations.map(toReservationModel)
         }
     }
@@ -64,7 +62,6 @@ export const toReservationModel =
             id: reservation.graphId, 
             type: reservation.type,
             description: reservation.description,
-            createdBy: toUserModel(reservation.createdBy, null),
             reservedBy: toUserModel(reservation.reservedBy, null)
         }
     }

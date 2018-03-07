@@ -34,8 +34,6 @@ export const schema = [
             capacity: Int
             plateNumber: String
             ymm: String
-            createdBy: User
-            operatedBy: User
             reservations: [Reservation]
         }
 
@@ -43,7 +41,6 @@ export const schema = [
             id: ID!
             type: RESERVATION_TYPE!
             description: String
-            createdBy: User
             reservedBy: User
         }
 
@@ -84,7 +81,6 @@ export type ReservationModel = {
     id: number, 
     type: ReservationType,
     description: string,
-    createdBy: UserModel,
     reservedBy: UserModel
 }
 
@@ -95,8 +91,6 @@ export type TransportModel = {
     capacity: number,
     plateNumber: string,
     ymm: string,
-    createdBy: UserModel,
-    operatedBy: UserModel,
     reservations: ReservationModel[]
 }
 

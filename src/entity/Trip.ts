@@ -23,7 +23,7 @@ export class Trip {
     graphId: number;
 
     @ManyToOne((type) => User, (u) => u.tripsCreated,
-    {cascadeInsert: true, eager: true})
+    {eager: true})
     createdBy: User;
 
     @OneToMany((type) => Leg, (l) => l.trip,

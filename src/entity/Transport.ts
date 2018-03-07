@@ -41,20 +41,11 @@ export class Transport {
     @Column({type: "text", nullable: true})
     ymm: string | null;
 
-    @ManyToOne(type => User, u => u.transportsCreated,
-    {cascadeAll: true})
-    createdBy: User;
-
-    @ManyToOne(type => User, u => u.transportsOperated,
-    {cascadeAll: true})
-    operatedBy: User;
-
     @OneToMany(type => Reservation, r => r.transport,
     {cascadeInsert: true, eager: true})
     reservations: Reservation[];
 
-    @OneToOne(type => Leg, l => l.transport,
-    {cascadeInsert: true})
+    @OneToOne(type => Leg, l => l.transport)
     leg: Leg;
 
     @CreateDateColumn()

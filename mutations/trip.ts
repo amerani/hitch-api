@@ -43,7 +43,6 @@ export const resolver : IResolvers = {
             const reservations: any = [
                 {
                     type: reservationType,
-                    createdBy: domainUser,
                     price: 0
                 }
             ];
@@ -54,7 +53,8 @@ export const resolver : IResolvers = {
                 arrival,
                 departure,
                 transportType,
-                reservations
+                reservations,
+                domainUser
             );
 
             return toTripModel(trip);
