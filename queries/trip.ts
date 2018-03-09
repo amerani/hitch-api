@@ -7,22 +7,8 @@ import { fetchTripByGraphId } from "../src/queries";
 
 export const schema = [
     `
-        type OpenTrip {
-            id: ID!
-            createdBy: User
-            legs: [Leg]!
-        }
-
-        type OpenLeg {
-            id: ID!
-            origin: Location!
-            destination: Location!
-            arrival: String!
-            departure: String!
-        }
-
         extend type Query {
-            trips(skip: Int, take: Int): [OpenTrip]
+            trips(skip: Int, take: Int): [Trip]
             trip(id: ID!):Trip
         }
     `
