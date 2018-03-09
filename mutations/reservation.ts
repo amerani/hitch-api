@@ -1,7 +1,7 @@
 import { getRepository } from "typeorm";
 import { Transport } from "../src/entity/Transport";
 import { Reservation } from "../src/entity/Reservation";
-import { toTransportModel } from "../transformers";
+import { toTransportModel, toReservationModel } from "../transformers";
 import { fetchUserByEmail, fetchUserById } from "../src/queries";
 import { Trip } from "../src/entity/Trip";
 
@@ -13,6 +13,10 @@ export const schema = [
                 type: RESERVATION_TYPE!
                 description: String
             ):Transport
+
+            reserve(
+                reservationId: ID!
+            ):Reservation
         }
     `
 ]
@@ -44,6 +48,27 @@ export const resolver = {
             transport = await repo.save(transport);
 
             return toTransportModel(transport);
+        },
+
+        reserve: async(root, args, ctx) => {
+            const userContext = await ctx.user;
+            if(!userContext){
+                throw new Error("Unauthorized");
+            }
+
+            const { reservationId } = args;
+
+            const repo = getRepository(Reservation);
+            let reservation = await repo.findOne({
+                where : {
+                    graphId: reservationId
+                }
+            });
+            reservation.reservedBy = userContext;
+            
+            reservation = await repo.save(reservation);
+
+            return toReservationModel(reservation);
         }
     }
 }

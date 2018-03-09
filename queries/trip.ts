@@ -3,7 +3,7 @@ import { Trip } from "../src/entity/Trip";
 import { toTripModel } from "../transformers";
 import { Leg } from "../src/entity/Leg";
 import { Transport } from "../src/entity/Transport";
-import { fetchByGraphIdWithOpenReservations } from "../src/queries";
+import { fetchTripByGraphId } from "../src/queries";
 
 export const schema = [
     `
@@ -48,9 +48,14 @@ export const resolver = {
         },
 
         trip: async (root, args, ctx) => {
+            const userContext = ctx.user;
+            if(!userContext){
+                throw new Error("Unauthorized");
+            }
+
             const { id } = args;
 
-            const trip = await fetchByGraphIdWithOpenReservations(id);
+            const trip = await fetchTripByGraphId(id);
 
             return toTripModel(trip);
         }

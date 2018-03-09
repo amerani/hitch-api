@@ -1,11 +1,12 @@
 const gql = require('graphql-tag');
 const createUser = require("./signupHelper");
 const createTrip = require("./createTrip");
+const getTrip = require('./getTrip');
 
 let user;
 let trip;
 
-beforeAll(async () => {
+beforeEach(async () => {
     user = await createUser();
     trip = await createTrip(user);
 })
@@ -90,4 +91,37 @@ test('should query existing trip', async () => {
     expect(data.legs[0].origin.city).not.toBeNull();
     expect(data.legs[0].transport.reservations).not.toBeNull();
     expect(data.legs[0].transport.reservations[0].type).not.toBeNull();
+})
+
+test('should reserve existing reservation', async () => {
+
+    expect(trip.legs[0].transport.reservations[0].reservedBy).toBeNull();
+
+    const mutation = gql`
+        mutation reserve($id: ID!) {
+            reserve(reservationId: $id) {
+                id
+            }
+        }
+    `
+
+    const res = await Client.mutate({
+        mutation,
+        variables: {
+            id: trip.legs[0].transport.reservations[0].id
+        },
+        context: {
+            headers: {
+                authorization: `Bearer ${user.jwt}`
+            }
+        }
+    })
+    
+    const data = res.data.reserve;
+
+    expect(data.id).not.toBeNull();
+
+    trip = await getTrip(trip.id, user);
+
+    expect(trip.legs[0].transport.reservations[0].reservedBy.id).not.toBeNull();
 })

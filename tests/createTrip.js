@@ -18,6 +18,9 @@ module.exports = async function(user) {
                         id
                         reservations {
                             id
+                            reservedBy {
+                                id
+                            }
                         }
                     }
                 }
