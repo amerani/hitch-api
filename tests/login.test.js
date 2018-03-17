@@ -8,9 +8,12 @@ test.only('should login with email and password', async () => {
     const signupRes = await signup(email, password);
 
     const loginMutation = gql`
-        mutation($email:String!, $password:String!) {
-            login(email:$email, password:$password) {
-                id, jwt
+        mutation($input: LoginInput!) {
+            login(input: $input) {
+                user {
+                    id,
+                    jwt
+                }
             }
         }
     `;
@@ -18,7 +21,7 @@ test.only('should login with email and password', async () => {
     const loginRes = await Client.mutate({
         mutation: loginMutation,
         variables: {
-            email, password
+            input: {email, password}
         }
     })
 
