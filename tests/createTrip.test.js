@@ -9,23 +9,30 @@ test('should create minimal trip', async () => {
     const mutation = gql`
         mutation {
             createMinimalTrip (
-                origin: "Austin",
-                destination: "New York",
-                arrival:"2013-02-04T18:35:24+00:00",
-                departure: "2013-02-04T18:35:24+00:00",
-                transportType: CAR,
-                reservationType: SEAT
-            ) {
-                id
-                createdBy {
-                    id
+                input: {
+                    origin: "Austin",
+                    destination: "New York",
+                    arrival:"2013-02-04T18:35:24+00:00",
+                    departure: "2013-02-04T18:35:24+00:00",
+                    transportType: CAR,
+                    reservationType: SEAT
                 }
-                legs {
-                    id
-                    transport {
+            ) {
+                trip {
+                    createdBy {
                         id
-                        reservations {
+                    }
+                    id
+                    legs {
+                        id
+                        transport {
                             id
+                            reservations {
+                                id
+                                reservedBy {
+                                    id
+                                }
+                            }
                         }
                     }
                 }
@@ -33,22 +40,27 @@ test('should create minimal trip', async () => {
         }
     `;
 
-    const res = await Client.mutate({
-        mutation,
-        context: {
-            headers: {
-                authorization: `Bearer ${user.jwt}`
+    try {
+        const res = await Client.mutate({
+            mutation,
+            context: {
+                headers: {
+                    authorization: `Bearer ${user.jwt}`
+                }
             }
-        }
-    })
-
-    const trip = res.data.createMinimalTrip;
-
-    console.log("Trip ID: ", trip.id);
-
-    expect(trip.id).not.toBeNull();
-    expect(trip.createdBy.id).toEqual(user.id);
-    expect(trip.legs[0].id).not.toBeNull();
-    expect(trip.legs[0].transport.id).not.toBeNull();
-    expect(trip.legs[0].transport.reservations[0].id).not.toBeNull();
+        })
+    
+        const trip = res.data.createMinimalTrip.trip;
+    
+        console.log("Trip ID: ", trip.id);
+    
+        expect(trip.id).not.toBeNull();
+        expect(trip.createdBy.id).toEqual(user.id);
+        expect(trip.legs[0].id).not.toBeNull();
+        expect(trip.legs[0].transport.id).not.toBeNull();
+        expect(trip.legs[0].transport.reservations[0].id).not.toBeNull();        
+    } catch (error) {
+        console.log(JSON.stringify(error))
+        expect(error).toBeNull();
+    }
 })

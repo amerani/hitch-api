@@ -4,22 +4,26 @@ module.exports = async function(user) {
     const mutation = gql`
         mutation {
             createMinimalTrip (
-                origin: "Austin",
-                destination: "New York",
-                arrival:"2013-02-04T18:35:24+00:00",
-                departure: "2013-02-04T18:35:24+00:00",
-                transportType: CAR,
-                reservationType: SEAT
+                input: {
+                    origin: "Austin",
+                    destination: "New York",
+                    arrival:"2013-02-04T18:35:24+00:00",
+                    departure: "2013-02-04T18:35:24+00:00",
+                    transportType: CAR,
+                    reservationType: SEAT
+                }
             ) {
-                id
-                legs {
+                trip {
                     id
-                    transport {
+                    legs {
                         id
-                        reservations {
+                        transport {
                             id
-                            reservedBy {
+                            reservations {
                                 id
+                                reservedBy {
+                                    id
+                                }
                             }
                         }
                     }

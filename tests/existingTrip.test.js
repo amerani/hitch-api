@@ -9,7 +9,8 @@ let trip;
 beforeEach(async () => {
     const createUserResponse = await createUser();
     user = createUserResponse.user;
-    trip = await createTrip(user);
+    const createTripResponse = await createTrip(user);
+    trip = createTripResponse.trip;
 })
 
 test('should create new reservation on existing trip', async () => {

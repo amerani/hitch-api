@@ -3,26 +3,32 @@ import { fetchUserById } from "../src/queries";
 import { createMinimalTrip, CreateReservationModel } from "../src/commands";
 import { IResolvers, ITypeDefinitions } from "graphql-tools/dist/Interfaces";
 import { toUserModel, toTripModel } from "../transformers";
-import { ReservationModel } from "../models";
+import { ReservationModel, TripModel } from "../models";
 
 export const schema : ITypeDefinitions = [
     `
         extend type Mutation {
-            createMinimalTrip(
-                origin: String!
-                destination: String!
-                arrival: String!
-                departure: String!
-                transportType: TRANSPORT_TYPE!
-                reservationType: RESERVATION_TYPE!
-            ):Trip
+            createMinimalTrip(input: CreateTripInput!):CreateTripPayload
+        }
+
+        input CreateTripInput {
+            origin: String!
+            destination: String!
+            arrival: String!
+            departure: String!
+            transportType: TRANSPORT_TYPE!
+            reservationType: RESERVATION_TYPE!
+        }
+
+        type CreateTripPayload {
+            trip: Trip
         }
     `
 ]
 
 export const resolver : IResolvers = {
     Mutation: {
-        createMinimalTrip: async (root, args, ctx) => {
+        createMinimalTrip: async (root, args, ctx):Promise<CreateTripPayload> => {
             
             const userContext = await ctx.user;
             if(!userContext) {
@@ -38,7 +44,7 @@ export const resolver : IResolvers = {
                 departure,
                 transportType,
                 reservationType
-            } = args;
+            } = args.input;
             
             const reservations: any = [
                 {
@@ -57,7 +63,13 @@ export const resolver : IResolvers = {
                 domainUser
             );
 
-            return toTripModel(trip);
+            return {
+                trip: toTripModel(trip)
+            }
         }
     }
+}
+
+export type CreateTripPayload = {
+    trip: TripModel
 }
