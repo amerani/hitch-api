@@ -7,7 +7,8 @@ let user;
 let trip;
 
 beforeEach(async () => {
-    user = await createUser();
+    const createUserResponse = await createUser();
+    user = createUserResponse.user;
     trip = await createTrip(user);
 })
 

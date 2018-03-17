@@ -5,8 +5,10 @@ module.exports = async function(email, password) {
     const query = gql`
         mutation($email: String!, $password: String!) {
             signup(input:{email: $email, password: $password}) {
-                id,
-                jwt
+                user {
+                    id,
+                    jwt
+                }
             }
         }
     `;

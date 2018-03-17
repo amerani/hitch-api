@@ -9,22 +9,26 @@ import { toUserModel } from "../transformers";
 export const schema = [
     `
         extend type Mutation {
-            signup(input: SignupInput!):User
+            signup(input: SignUpInput!):SignUpPayload
         }
 
-        input SignupInput {
+        input SignUpInput {
             email: String!
             password: String!
             userName: String
             firstName: String
             lastName: String
         }
+
+        type SignUpPayload {
+            user: User
+        }
     `
 ]
 
 export const resolver = {
     Mutation: {
-        signup: async (root, props, ctx) => {
+        signup: async (root, props, ctx) : Promise<SignUpPayload> => {
             const {
                 email, 
                 password,
@@ -40,12 +44,18 @@ export const resolver = {
                 })
                 const { id } = user;
                 const token = jwt.sign({id, email}, JWT_SECRET);
-                const u : UserModel = toUserModel(user, token);
-                ctx.user = Promise.resolve(u);
-                return u;
+                const userModel : UserModel = toUserModel(user, token);
+                ctx.user = Promise.resolve(userModel);
+                return {
+                    user: userModel
+                }
             }
 
             throw new Error('email already exists');
         }
     }
+}
+
+export type SignUpPayload = {
+    user: UserModel
 }

@@ -3,7 +3,8 @@ const createUser = require("./signupHelper");
 const {DateTime} = require("luxon");
 
 test('should create minimal trip', async () => {
-    const user = await createUser();
+    const createUserResponse = await createUser();
+    const user = createUserResponse.user;
 
     const mutation = gql`
         mutation {
