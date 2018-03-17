@@ -20,13 +20,17 @@ test('should create new reservation on existing trip', async () => {
     const mutation = gql`
         mutation createReservation($transportId: ID!){
             createReservation(
-                transportId: $transportId,
-                type: SEAT
+                input: {
+                    transportId: $transportId,
+                    type: SEAT
+                }
             )
             {
-                id
-                reservations {
+                transport {
                     id
+                    reservations {
+                        id
+                    }
                 }
             }
         }        
@@ -46,7 +50,7 @@ test('should create new reservation on existing trip', async () => {
 
     expect(res).not.toBeNull();
 
-    const data = res.data.createReservation;
+    const data = res.data.createReservation.transport;
 
     expect(data.reservations).toHaveLength(numReservations + 1);
 })

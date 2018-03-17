@@ -4,32 +4,39 @@ import { Reservation } from "../src/entity/Reservation";
 import { toTransportModel, toReservationModel } from "../transformers";
 import { fetchUserByEmail, fetchUserById } from "../src/queries";
 import { Trip } from "../src/entity/Trip";
+import { TransportModel } from "../models";
 
 export const schema = [
     `
         extend type Mutation {
-            createReservation(
-                transportId: ID!
-                type: RESERVATION_TYPE!
-                description: String
-            ):Transport
+            createReservation(input: CreateReservationInput!):CreateReservationPayload
 
             reserve(
                 reservationId: ID!
             ):Reservation
+        }
+
+        input CreateReservationInput {
+            transportId: ID!
+            type: RESERVATION_TYPE!
+            description: String
+        }
+
+        type CreateReservationPayload {
+            transport: Transport
         }
     `
 ]
 
 export const resolver = {
     Mutation: {
-        createReservation: async(root, props, ctx) => {
+        createReservation: async(root, args, ctx):Promise<CreateReservationPayload> => {
             const userContext = await ctx.user;
             if(!userContext) {
                 throw new Error("Unauthorized");
             }
 
-            const {transportId, type, description} = props;
+            const {transportId, type, description} = args.input;
 
             const repo = getRepository(Transport);
 
@@ -47,7 +54,9 @@ export const resolver = {
             transport.reservations.push(res);
             transport = await repo.save(transport);
 
-            return toTransportModel(transport);
+            return {
+                transport: toTransportModel(transport)
+            };
         },
 
         reserve: async(root, args, ctx) => {
@@ -71,4 +80,8 @@ export const resolver = {
             return toReservationModel(reservation);
         }
     }
+}
+
+export type CreateReservationPayload = {
+    transport: TransportModel
 }
