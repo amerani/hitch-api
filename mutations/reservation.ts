@@ -20,6 +20,8 @@ export const schema = [
             transportId: ID!
             type: RESERVATION_TYPE!
             description: String
+            price: Int
+            exchangeRequest: String
         }
 
         type CreateReservationPayload {
@@ -36,7 +38,13 @@ export const resolver = {
                 throw new Error("Unauthorized");
             }
 
-            const {transportId, type, description} = args.input;
+            const {
+                transportId, 
+                type, 
+                description,
+                exchangeRequest,
+                price
+            } = args.input;
 
             const repo = getRepository(Transport);
 
@@ -49,7 +57,8 @@ export const resolver = {
             let res = new Reservation();
             res.type = type;
             res.description = description;
-            res.price = 0;
+            res.price = price;
+            res.exchangeRequest = exchangeRequest;
 
             transport.reservations.push(res);
             transport = await repo.save(transport);

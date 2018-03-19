@@ -24,7 +24,7 @@ export const schema = [
             destination: Location!
             arrival: String!
             departure: String!
-            transport: Transport!
+            transport: Transport
         }
 
         type Transport {
@@ -41,6 +41,9 @@ export const schema = [
             id: ID!
             type: RESERVATION_TYPE!
             description: String
+            price: Int
+            exchangeRequest: String
+            exchangeOffer: String
             reservedBy: User
         }
 
@@ -80,7 +83,10 @@ export type LocationModel = {
 export type ReservationModel = {
     id: number, 
     type: ReservationType,
+    price: number,
     description: string,
+    exchangeRequest: string,
+    exchangeOffer: string,
     reservedBy: UserModel
 }
 

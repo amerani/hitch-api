@@ -22,7 +22,9 @@ test('should create new reservation on existing trip', async () => {
             createReservation(
                 input: {
                     transportId: $transportId,
-                    type: SEAT
+                    type: SEAT,
+                    exchangeRequest: "Gas Money"
+                    price: 1
                 }
             )
             {
@@ -30,6 +32,8 @@ test('should create new reservation on existing trip', async () => {
                     id
                     reservations {
                         id
+                        exchangeRequest
+                        price
                     }
                 }
             }

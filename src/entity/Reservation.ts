@@ -29,7 +29,13 @@ export class Reservation {
     @Column({type: "text", nullable: true})
     description: string | null;
 
-    @Column({type: "decimal"})
+    @Column({type: "text", nullable: true})
+    exchangeRequest: string | null;
+
+    @Column({type: "text", nullable: true})
+    exchangeOffer: string | null;
+
+    @Column({type: "decimal", nullable: true})
     price: number;
 
     @ManyToOne(type => User, user => user.reservations,

@@ -62,6 +62,9 @@ export const toReservationModel =
             id: reservation.graphId, 
             type: reservation.type,
             description: reservation.description,
+            price: reservation.price,
+            exchangeOffer: reservation.exchangeOffer,
+            exchangeRequest: reservation.exchangeRequest,
             reservedBy: toUserModel(reservation.reservedBy, null)
         }
     }
