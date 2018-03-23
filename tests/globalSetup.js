@@ -7,7 +7,7 @@ const { InMemoryCache } = require( 'apollo-cache-inmemory');
 
 function initClient() {
     const httpLink = new HttpLink({ 
-        uri: `http://${API_HOST}:${API_PORT}`,
+        uri: `${API_HOST}:${API_PORT}`,
         fetch
     });
 
