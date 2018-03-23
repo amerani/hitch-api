@@ -69,7 +69,7 @@ createConnection(typeorm()).then(() => {
     });
 
     const requestLogger: express.RequestHandler = (req, res, next) => {
-        console.log("REQUEST BODY\n", req.body, "\n")
+        console.log("REQUEST BODY\n", req.method, req.body, "\n")
         next();
     } 
 
@@ -81,6 +81,8 @@ createConnection(typeorm()).then(() => {
         graphqlExpressMiddleware()
     ]
 
+    app.post('/', ...middlewares, (req, res) => res.redirect(307, 'graphql'))
+    app.get('/', (req, res) => res.redirect(307, 'graphiql'));
     app.use('/graphql', ...middlewares);
     app.use('/graphiql', graphiqlExpress({endpointURL: 'graphql'}));
 
