@@ -26,8 +26,8 @@ export const schema = [
 
 export const resolver = {
     Mutation: {
-        createMinimalTrip: authMutationFactory(async (root, args, ctx)
-            :Promise<CreateTripPayload> => {
+        createMinimalTrip: authMutationFactory<CreateTripPayload>(
+            async (root, args, ctx) => {
                 return {
                     trip: toTripModel(
                         await createTripCommand(

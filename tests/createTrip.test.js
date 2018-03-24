@@ -64,3 +64,35 @@ test('should create minimal trip', async () => {
         expect(error).toBeNull();
     }
 })
+
+test('should not create trip with unauthorized request', async () => {
+
+    const mutation = gql`
+        mutation {
+            createMinimalTrip (
+                input: {
+                    origin: "Austin",
+                    destination: "New York",
+                    arrival:"2013-02-04T18:35:24+00:00",
+                    departure: "2013-02-04T18:35:24+00:00",
+                    transportType: CAR,
+                    reservationType: SEAT
+                }
+            ) {
+                trip {
+                    id
+                }
+            }
+        }
+    `;
+
+    try {
+        const res = await Client.mutate({
+            mutation
+        })
+    } catch (error) {
+        console.log(JSON.stringify(error))
+        expect(error).not.toBeNull();
+        expect(error.graphQLErrors[0].message).toEqual('Unauthorized')
+    }
+})
