@@ -108,9 +108,11 @@ test('should reserve existing reservation', async () => {
     expect(trip.legs[0].transport.reservations[0].reservedBy).toBeNull();
 
     const mutation = gql`
-        mutation reserve($id: ID!) {
-            reserve(reservationId: $id) {
-                id
+        mutation requestReservation($id: ID!) {
+            requestReservation(input:{reservationId: $id}) {
+                reservation {
+                    id
+                }
             }
         }
     `
@@ -127,7 +129,7 @@ test('should reserve existing reservation', async () => {
         }
     })
     
-    const data = res.data.reserve;
+    const data = res.data.requestReservation.reservation;
 
     expect(data.id).not.toBeNull();
 

@@ -5,15 +5,17 @@ import { toTransportModel, toReservationModel } from "../transformers";
 import { fetchUserByEmail, fetchUserById } from "../src/queries";
 import { Trip } from "../src/entity/Trip";
 import { TransportModel } from "../models";
+import createReservationCommand from "../src/createReservationCommand";
+import requestReservationCommand from "../src/requestReservationCommand";
 
 export const schema = [
     `
         extend type Mutation {
-            createReservation(input: CreateReservationInput!):CreateReservationPayload
+            createReservation(input: CreateReservationInput!)
+            :CreateReservationPayload
 
-            reserve(
-                reservationId: ID!
-            ):Reservation
+            requestReservation(input: RequestReservationInput!)
+            :RequestReservationPayload
         }
 
         input CreateReservationInput {
@@ -27,6 +29,14 @@ export const schema = [
         type CreateReservationPayload {
             transport: Transport
         }
+
+        input RequestReservationInput {
+            reservationId: ID!
+        }
+
+        type RequestReservationPayload {
+            reservation: Reservation
+        }
     `
 ]
 
@@ -38,59 +48,45 @@ export const resolver = {
                 throw new Error("Unauthorized");
             }
 
-            const {
-                transportId, 
-                type, 
-                description,
-                exchangeRequest,
-                price
-            } = args.input;
-
-            const repo = getRepository(Transport);
-
-            let transport = await repo.findOne({
-                where: {
-                    graphId: transportId
-                }
-            })
-
-            let res = new Reservation();
-            res.type = type;
-            res.description = description;
-            res.price = price;
-            res.exchangeRequest = exchangeRequest;
-
-            transport.reservations.push(res);
-            transport = await repo.save(transport);
+            const transport = await createReservationCommand(args.input);
 
             return {
                 transport: toTransportModel(transport)
-            };
+            }
         },
 
-        reserve: async(root, args, ctx) => {
+        requestReservation: async(root, args, ctx) => {
             const userContext = await ctx.user;
             if(!userContext){
                 throw new Error("Unauthorized");
             }
 
-            const { reservationId } = args;
+            const reservation = await requestReservationCommand(
+                args.input, userContext);
 
-            const repo = getRepository(Reservation);
-            let reservation = await repo.findOne({
-                where : {
-                    graphId: reservationId
-                }
-            });
-            reservation.reservedBy = userContext;
-            
-            reservation = await repo.save(reservation);
-
-            return toReservationModel(reservation);
+            return {
+                reservation: toReservationModel(reservation)
+            };
         }
     }
 }
 
 export type CreateReservationPayload = {
     transport: TransportModel
+}
+
+export type CreateReservationInput = {
+    transportId: string,
+    type: string, 
+    description: string,
+    exchangeRequest: string,
+    price: number
+}
+
+export type RequestReservationPayload = {
+    reservation: Reservation
+}
+
+export type RequestReservationInput = {
+    reservationId: string
 }
