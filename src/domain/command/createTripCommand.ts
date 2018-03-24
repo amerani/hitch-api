@@ -1,8 +1,7 @@
-import { CreateTripInput } from "../mutations/trip";
-import { User } from "./entity/User";
-import { Trip } from "./entity/Trip";
-import { fetchUserById } from "./queries";
 import { createMinimalTrip } from "./commands";
+import { CreateTripInput } from "../../graphql/mutation/trip";
+import { User } from "../entity/User";
+import { Trip } from "../entity/Trip";
 
 export default async function (
     input: CreateTripInput,

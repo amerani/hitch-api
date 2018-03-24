@@ -1,7 +1,7 @@
-import { Reservation } from "./entity/Reservation";
 import { getRepository } from "typeorm";
-import { User } from "./entity/User";
-import { RequestReservationInput } from "../mutations/requestReservation";
+import { RequestReservationInput } from "../../graphql/mutation/requestReservation";
+import { User } from "../entity/User";
+import { Reservation } from "../entity/Reservation";
 
 export default async function(
     input: RequestReservationInput,

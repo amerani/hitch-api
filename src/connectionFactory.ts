@@ -16,7 +16,7 @@ export function typeorm(): PostgresConnectionOptions
         database: PG_DATABASE,
         synchronize: true,
         entities: [
-           "src/entity/**/*.ts"
+           "src/domain/entity/**/*.ts"
         ],
         migrations: [
            "src/migration/**/*.ts"
@@ -25,7 +25,7 @@ export function typeorm(): PostgresConnectionOptions
            "src/subscriber/**/*.ts"
         ],
         cli: {
-           "entitiesDir": "src/entity",
+           "entitiesDir": "src/domain/entity",
            "migrationsDir": "src/migration",
            "subscribersDir": "src/subscriber"
         }        

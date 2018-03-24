@@ -1,8 +1,8 @@
 import { DateTime } from "luxon";
 import { getRepository} from "typeorm";
-import { Trip } from "../entity/Trip";
-import { Transport } from "../entity/Transport";
-import { User } from "../entity/User";
+import { Transport } from "../domain/entity/Transport";
+import { User } from "../domain/entity/User";
+import { Trip } from "../domain/entity/Trip";
 
 export async function createRoundTripListingAsync(user: User): Promise<Trip> {
 

@@ -1,5 +1,5 @@
-import { ReservationType } from "./src/entity/Reservation";
-import { TransportType } from "./src/entity/Transport";
+import { ReservationType } from "../domain/entity/Reservation";
+import { TransportType } from "../domain/entity/Transport";
 
 export const schema = [
     `

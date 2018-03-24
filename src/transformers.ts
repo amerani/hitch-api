@@ -1,11 +1,11 @@
-import { UserAccount } from "./src/entity/UserAccount";
-import { User } from "./src/entity/User";
-import { UserModel, LegModel, LocationModel, TransportModel, ReservationModel, TripModel } from "./models";
-import { Leg } from "./src/entity/Leg";
-import { Location } from "./src/entity/Location";
-import { Transport } from "./src/entity/Transport";
-import { Reservation } from "./src/entity/Reservation";
-import { Trip } from "./src/entity/Trip";
+import { UserAccount } from "./domain/entity/UserAccount";
+import { User } from "./domain/entity/User";
+import { UserModel, LegModel, LocationModel, TransportModel, ReservationModel, TripModel } from "./graphql/models";
+import { Leg } from "./domain/entity/Leg";
+import { Location } from "./domain/entity/Location";
+import { Transport } from "./domain/entity/Transport";
+import { Reservation } from "./domain/entity/Reservation";
+import { Trip } from "./domain/entity/Trip";
 
 export const toUserModel = 
     function(user: User, jwt: string): UserModel {

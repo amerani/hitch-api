@@ -6,17 +6,15 @@ import * as cors from "cors";
 import {graphqlExpress, graphiqlExpress} from "apollo-server-express";
 import {makeExecutableSchema} from "graphql-tools";
 import { Entity } from "typeorm";
-import { createAccountAsync, createMinimalTrip, CreateReservationModel } from "./src/commands";
 import * as bcrypt from "bcrypt";
-import { fetchUserByEmail, fetchUserById } from "./src/queries";
 import * as jwtExpress from 'express-jwt';
 import { JWT_SECRET } from './config';
 import * as jwt from 'jsonwebtoken';
-import { User } from "./src/entity/User";
 import { typeorm } from "./connectionFactory";
-import { schemas } from "./schemas";
-import { resolvers } from "./resolvers";
+import { schemas } from "./graphql/schemas";
+import { resolvers } from "./graphql/resolvers";
 import { merge } from "lodash";
+import { fetchUserById } from "./domain/query/queries";
 
 createConnection(typeorm()).then(() => {
 

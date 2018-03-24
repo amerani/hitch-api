@@ -1,10 +1,10 @@
-import { fetchUserByEmail } from "../src/queries";
-import { createAccountAsync } from "../src/commands";
-import { JWT_SECRET } from '../config';
 import * as bcrypt from "bcrypt";
 import * as jwt from 'jsonwebtoken';
 import { UserModel } from "../models";
-import { toUserModel } from "../transformers";
+import { fetchUserByEmail } from "../../domain/query/queries";
+import { createAccountAsync } from "../../domain/command/commands";
+import { JWT_SECRET } from "../../config";
+import { toUserModel } from "../../transformers";
 
 export const schema = [
     `

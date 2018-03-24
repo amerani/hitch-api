@@ -1,7 +1,7 @@
-import { Transport } from "./entity/Transport";
 import { getRepository } from "typeorm";
-import { Reservation } from "./entity/Reservation";
-import { CreateReservationInput } from "../mutations/createReservation";
+import { CreateReservationInput } from "../../graphql/mutation/createReservation";
+import { Transport } from "../entity/Transport";
+import { Reservation } from "../entity/Reservation";
 
 export default async function(
     input: CreateReservationInput)

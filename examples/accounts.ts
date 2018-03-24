@@ -1,5 +1,5 @@
 import {createConnection} from 'typeorm';
-import {fetchUserById, fetchUserByEmail} from '../queries';
+import { fetchUserByEmail } from '../domain/query/queries';
 
 createConnection({
     "type": "postgres",

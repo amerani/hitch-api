@@ -1,9 +1,9 @@
 import { getRepository } from "typeorm";
-import { User } from "./entity/User";
-import { Trip } from "./entity/Trip";
-import { Reservation } from "./entity/Reservation";
-import { Leg } from "./entity/Leg";
-import { Transport } from "./entity/Transport";
+import { User } from "../entity/User";
+import { Trip } from "../entity/Trip";
+import { Transport } from "../entity/Transport";
+import { Leg } from "../entity/Leg";
+import { Reservation } from "../entity/Reservation";
 
 export function fetchUserByEmail(email: String): Promise<User> {
     return getRepository(User)

@@ -1,7 +1,7 @@
-import authMutationFactory from "../src/authMutationFactory";
-import createTripCommand from "../src/createTripCommand";
-import { toTripModel } from "../transformers";
 import { TripModel } from "../models";
+import authMutationFactory from "../authMutationFactory";
+import { toTripModel } from "../../transformers";
+import createTripCommand from "../../domain/command/createTripCommand";
 
 export const schema = [
     `

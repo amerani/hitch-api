@@ -1,9 +1,7 @@
 import { getRepository } from "typeorm";
-import { Trip } from "../src/entity/Trip";
-import { toTripModel } from "../transformers";
-import { Leg } from "../src/entity/Leg";
-import { Transport } from "../src/entity/Transport";
-import { fetchTripByGraphId } from "../src/queries";
+import { Trip } from "../../domain/entity/Trip";
+import { toTripModel } from "../../transformers";
+import { fetchTripByGraphId } from "../../domain/query/queries";
 
 export const schema = [
     `

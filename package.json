@@ -5,11 +5,10 @@
    "main": "index.js",
    "scripts": {
       "test": "jest --forceExit --verbose",
-      "start": "ts-node src/index.ts",
       "lint": "tslint -c tslint.json 'src/**/*.ts'",
-      "serve": "ts-node server.ts",
+      "serve": "ts-node ./src/server.ts",
       "ts-node": "ts-node",
-      "watch-server": "nodemon --exec ts-node ./server.ts"
+      "watch-server": "nodemon --exec ts-node ./src/server.ts"
    },
    "jest": {
       "globalSetup": "./tests/globalSetup.js",

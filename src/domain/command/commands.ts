@@ -1,10 +1,9 @@
 import {getConnection, getManager, getRepository} from "typeorm";
-import { User } from "./entity/User";
-import { Trip } from "./entity/Trip";
-import { UserAccount } from "./entity/UserAccount";
-import { Reservation, ReservationType } from "./entity/Reservation";
-import { TransportType } from "./entity/Transport";
-import { ReservationModel } from "../models";
+import { User } from "../entity/User";
+import { Reservation, ReservationType } from "../entity/Reservation";
+import { TransportType } from "../entity/Transport";
+import { ReservationModel } from "../../graphql/models";
+import { Trip } from "../entity/Trip";
 
 export async function createAccountAsync(
     {firstName, lastName, email, userName, passwordHash})

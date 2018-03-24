@@ -1,8 +1,7 @@
-import { toTransportModel, toReservationModel } from "../transformers";
 import { TransportModel, ReservationModel } from "../models";
-import createReservationCommand from "../src/createReservationCommand";
-import requestReservationCommand from "../src/requestReservationCommand";
-import authMutationFactory from "../src/authMutationFactory";
+import authMutationFactory from "../authMutationFactory";
+import { toReservationModel } from "../../transformers";
+import requestReservationCommand from "../../domain/command/requestReservationCommand";
 
 export const schema = [
     `
