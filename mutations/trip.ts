@@ -1,11 +1,9 @@
-import { User } from "../src/entity/User";
-import { fetchUserById } from "../src/queries";
-import { createMinimalTrip, CreateReservationModel } from "../src/commands";
-import { IResolvers, ITypeDefinitions } from "graphql-tools/dist/Interfaces";
-import { toUserModel, toTripModel } from "../transformers";
-import { ReservationModel, TripModel } from "../models";
+import authMutationFactory from "../src/authMutationFactory";
+import createTripCommand from "../src/createTripCommand";
+import { toTripModel } from "../transformers";
+import { TripModel } from "../models";
 
-export const schema : ITypeDefinitions = [
+export const schema = [
     `
         extend type Mutation {
             createMinimalTrip(input: CreateTripInput!):CreateTripPayload
@@ -26,48 +24,29 @@ export const schema : ITypeDefinitions = [
     `
 ]
 
-export const resolver : IResolvers = {
+export const resolver = {
     Mutation: {
-        createMinimalTrip: async (root, args, ctx):Promise<CreateTripPayload> => {
-            
-            const userContext = await ctx.user;
-            if(!userContext) {
-                throw new Error("Unauthorized");
-            }
-
-            const domainUser = await fetchUserById(userContext.id);
-
-            const {
-                origin,
-                destination, 
-                arrival,
-                departure,
-                transportType,
-                reservationType
-            } = args.input;
-            
-            const reservations: any = [
-                {
-                    type: reservationType,
-                    price: 0
+        createMinimalTrip: authMutationFactory(async (root, args, ctx)
+            :Promise<CreateTripPayload> => {
+                return {
+                    trip: toTripModel(
+                        await createTripCommand(
+                            args.input,
+                            ctx.user
+                        )
+                    )
                 }
-            ];
-
-            const trip = await createMinimalTrip(
-                origin,
-                destination,
-                arrival,
-                departure,
-                transportType,
-                reservations,
-                domainUser
-            );
-
-            return {
-                trip: toTripModel(trip)
-            }
-        }
+        })
     }
+}
+
+export type CreateTripInput = {
+    origin: string,
+    destination: string,
+    arrival: string,
+    departure: string,
+    transportType: string,
+    reservationType: string   
 }
 
 export type CreateTripPayload = {
