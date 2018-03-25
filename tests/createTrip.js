@@ -3,7 +3,7 @@ const gql = require('graphql-tag');
 module.exports = async function(user) {
     const mutation = gql`
         mutation {
-            createMinimalTrip (
+            createTrip (
                 input: {
                     origin: "Austin",
                     destination: "New York",
@@ -41,7 +41,7 @@ module.exports = async function(user) {
         }
     })
 
-    const trip = res.data.createMinimalTrip;
+    const trip = res.data.createTrip;
 
     return trip;
 }

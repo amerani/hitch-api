@@ -6,7 +6,7 @@ import createTripCommand from "../../domain/command/createTripCommand";
 export const schema = [
     `
         extend type Mutation {
-            createMinimalTrip(input: CreateTripInput!):CreateTripPayload
+            createTrip(input: CreateTripInput!):CreateTripPayload
         }
 
         input CreateTripInput {
@@ -26,7 +26,7 @@ export const schema = [
 
 export const resolver = {
     Mutation: {
-        createMinimalTrip: authMutationFactory<CreateTripPayload>(
+        createTrip: authMutationFactory<CreateTripPayload>(
             async (root, args, ctx) => {
                 return {
                     trip: toTripModel(

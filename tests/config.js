@@ -1,6 +1,6 @@
 //regression
 module.exports = {
-    // API_HOST: 'https://api.hitch.cool',
+    // API_HOST: 'https://apidev.hitch.cool',
     // API_PORT: '443'
 }
 

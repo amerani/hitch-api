@@ -8,7 +8,7 @@ test('should create minimal trip', async () => {
 
     const mutation = gql`
         mutation {
-            createMinimalTrip (
+            createTrip (
                 input: {
                     origin: "Austin",
                     destination: "New York",
@@ -50,7 +50,7 @@ test('should create minimal trip', async () => {
             }
         })
     
-        const trip = res.data.createMinimalTrip.trip;
+        const trip = res.data.createTrip.trip;
     
         expect(trip.id).not.toBeNull();
         expect(trip.createdBy.id).toEqual(user.id);
@@ -66,7 +66,7 @@ test('should not create trip with unauthorized request', async () => {
 
     const mutation = gql`
         mutation {
-            createMinimalTrip (
+            createTrip (
                 input: {
                     origin: "Austin",
                     destination: "New York",

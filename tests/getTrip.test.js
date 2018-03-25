@@ -11,6 +11,9 @@ test('should get publicly available trips', async () => {
                     origin {
                         city
                     }
+                    transport {
+                        type
+                    }
                 }
             }
         }
@@ -25,4 +28,5 @@ test('should get publicly available trips', async () => {
     expect(data).toHaveLength(2);
     expect(data[0].createdBy.email).not.toBeNull();
     expect(data[0].legs[0].origin.city).not.toBeNull();
+    expect(data[0].legs[0].transport).toBeNull();
 })
