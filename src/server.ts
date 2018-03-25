@@ -74,7 +74,7 @@ createConnection(typeorm()).then(() => {
     const middlewares: express.RequestHandler[] = [
         bodyParser.json(),
         cors(),
-        requestLogger,
+        // requestLogger,
         jwtMiddleware(),
         graphqlExpressMiddleware()
     ]

@@ -32,7 +32,7 @@ export class Transport {
     @Column({type: "text", nullable: true})
     description: string | null;
 
-    @Column()
+    @Column({nullable: true})
     capacity: number;
 
     @Column({type: "text", nullable: true})

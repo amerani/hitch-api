@@ -13,6 +13,7 @@ module.exports = async function(tripId, user){
                         city
                     }
                     transport {
+                        type
                         reservations {
                             id
                             type
