@@ -32,7 +32,7 @@ export const resolver = {
         },
 
         trip: async (root, args, ctx) => {
-            const userContext = ctx.user;
+            const userContext = await ctx.user;
             if(!userContext){
                 throw new Error("Unauthorized");
             }

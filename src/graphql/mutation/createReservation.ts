@@ -26,8 +26,8 @@ export const schema = [
 
 export const resolver = {
     Mutation: {
-        createReservation: authMutationFactory(async (root, args, ctx)
-            :Promise<CreateReservationPayload> => {
+        createReservation: authMutationFactory<CreateReservationPayload>(
+            async (root, args, ctx) => {
                 return {
                     transport: toTransportModel(
                         await createReservationCommand(args.input))

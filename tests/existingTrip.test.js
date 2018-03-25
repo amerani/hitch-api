@@ -133,6 +133,8 @@ test('should reserve existing reservation', async () => {
 
     expect(data.id).not.toBeNull();
 
+    console.log("TripId: " + trip.id);
+
     trip = await getTrip(trip.id, user);
 
     expect(trip.legs[0].transport.reservations[0].reservedBy.id).not.toBeNull();

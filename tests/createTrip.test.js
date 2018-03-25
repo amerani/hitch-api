@@ -52,15 +52,12 @@ test('should create minimal trip', async () => {
     
         const trip = res.data.createMinimalTrip.trip;
     
-        console.log("Trip ID: ", trip.id);
-    
         expect(trip.id).not.toBeNull();
         expect(trip.createdBy.id).toEqual(user.id);
         expect(trip.legs[0].id).not.toBeNull();
         expect(trip.legs[0].transport.id).not.toBeNull();
         expect(trip.legs[0].transport.reservations[0].id).not.toBeNull();        
     } catch (error) {
-        console.log(JSON.stringify(error))
         expect(error).toBeNull();
     }
 })
@@ -91,7 +88,6 @@ test('should not create trip with unauthorized request', async () => {
             mutation
         })
     } catch (error) {
-        console.log(JSON.stringify(error))
         expect(error).not.toBeNull();
         expect(error.graphQLErrors[0].message).toEqual('Unauthorized')
     }
