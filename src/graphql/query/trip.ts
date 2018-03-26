@@ -41,6 +41,10 @@ export const resolver = {
 
             const trip = await fetchTripByGraphId(id);
 
+            if(trip.createdBy.id !== userContext.id) {
+                throw new Error("Unauthorized: Not creator");
+            }
+
             return toTripModel(trip);
         }
     }
