@@ -2,6 +2,7 @@ import { getRepository } from "typeorm";
 import { Trip } from "../../domain/entity/Trip";
 import { toTripModel } from "../../transformers";
 import { fetchTripByGraphId } from "../../domain/query/queries";
+import { merge } from 'lodash';
 
 export const schema = [
     `
@@ -15,6 +16,7 @@ export const schema = [
 export const resolver = {
     Query: {
         trips: async (root, args, ctx) => {
+            const userContext = await ctx.user;
             const {
                 skip,
                 take
@@ -22,11 +24,21 @@ export const resolver = {
 
             const repo = getRepository(Trip);
 
-            const trips = await repo.find({
+            let findOptions = {
                 skip: skip || 0,
                 take: take || 10,
                 relations: ["legs", "legs.origin", "legs.destination"]
-            })
+            };
+
+            if(userContext) {
+                findOptions = merge(findOptions, {
+                    where: {
+                        createdBy: userContext.id
+                    }
+                })
+            }
+
+            const trips = await repo.find(findOptions);
 
             return trips.map(t => toTripModel(t))
         },
