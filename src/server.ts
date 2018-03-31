@@ -74,10 +74,17 @@ createConnection(typeorm()).then(() => {
     const middlewares: express.RequestHandler[] = [
         bodyParser.json(),
         cors(),
-        // requestLogger,
+        requestLogger,
         jwtMiddleware(),
         graphqlExpressMiddleware()
     ]
+
+    app.options("/*", (req, res) => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'POST,OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');        
+        res.send(200);
+    })
 
     app.post('/', ...middlewares, (req, res) => res.redirect(307, 'graphql'))
     app.get('/', (req, res) => res.redirect(307, 'graphiql'));
