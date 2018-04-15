@@ -2,10 +2,10 @@ const gql = require('graphql-tag');
 const createUser = require('./signupHelper');
 const createTrip = require('./createTrip');
 
-test('should get publicly available trips', async () => {
+test('should only get publicly available trips when un auth', async () => {
     const query = gql`
         query {
-            trips(skip:0, take:2) {
+            trips(take:2) {
                 createdBy {
                     email
                 }
@@ -33,10 +33,10 @@ test('should get publicly available trips', async () => {
     expect(data[0].legs[0].transport).toBeNull();
 })
 
-test('should only get my trips', async () => {
+test('should also get my trips when auth', async () => {
     const query = gql`
         query {
-            trips {
+            trips(take:1) {
                 createdBy {
                     email
                 }
@@ -66,5 +66,5 @@ test('should only get my trips', async () => {
 
     const data = response.data.trips;
 
-    expect(data).toHaveLength(1);
+    expect(data).toHaveLength(2);
 })
