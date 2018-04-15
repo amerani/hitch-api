@@ -24,11 +24,14 @@ export const resolver = {
 
             const repo = getRepository(Trip);
 
+            const queries:Promise<Trip[]>[] = [];
             let findOptions = {
                 skip: skip || 0,
                 take: take || 10,
                 relations: ["legs", "legs.origin", "legs.destination"]
             };
+
+            queries.push(repo.find(findOptions));
 
             if(userContext) {
                 findOptions = merge(findOptions, {
@@ -36,10 +39,15 @@ export const resolver = {
                         createdBy: userContext.id
                     }
                 })
+                queries.push(repo.find(findOptions))
             }
 
-            const trips = await repo.find(findOptions);
-
+            const tripsResponses = await Promise.all(queries);
+            const trips = tripsResponses.reduce((prev, cur) =>{
+                prev.push(...cur);
+                return prev;
+             }, [])
+            
             return trips.map(t => toTripModel(t))
         },
 
