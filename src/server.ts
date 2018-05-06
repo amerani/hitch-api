@@ -15,6 +15,11 @@ import { schemas } from "./graphql/schemas";
 import { resolvers } from "./graphql/resolvers";
 import { merge } from "lodash";
 import { fetchUserById } from "./domain/query/queries";
+import { withFilter } from 'graphql-subscriptions';
+import { execute, subscribe } from 'graphql';
+import { createServer } from 'http';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { pubSub } from './pubSubProvider';
 
 createConnection(typeorm()).then(() => {
 
@@ -28,9 +33,15 @@ createConnection(typeorm()).then(() => {
                 mutation:String
             }
 
+            type Subscription {
+                subscription:String
+                tripCreated: Trip
+            }
+
             type schema {
                 query: Query
                 mutation: Mutation
+                subscription: Subscription
             }
         `
     ]
@@ -41,6 +52,19 @@ createConnection(typeorm()).then(() => {
         },
         Mutation: {
             mutation: () => "mutation"
+        },
+        Subscription: {
+            subscription: {
+                subscribe: () => {
+                    setTimeout(() => pubSub.publish('#', {
+                        subscription: 'subscription'
+                    }), 2000);
+                    return pubSub.asyncIterator('#');
+                }
+            },
+            tripCreated: {
+                subscribe: () => pubSub.asyncIterator('tripCreated')
+            }
         }
     }
 
@@ -79,7 +103,7 @@ createConnection(typeorm()).then(() => {
         graphqlExpressMiddleware()
     ]
 
-    app.options("/*", (req, res) => {
+    app.options("*", (req, res) => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Methods', 'POST,OPTIONS');
         res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');        
@@ -89,10 +113,24 @@ createConnection(typeorm()).then(() => {
     app.post('/', ...middlewares, (req, res) => res.redirect(307, 'graphql'))
     app.get('/', (req, res) => res.redirect(307, 'graphiql'));
     app.use('/graphql', ...middlewares);
-    app.use('/graphiql', graphiqlExpress({endpointURL: 'graphql'}));
+    app.use('/graphiql', graphiqlExpress({
+        endpointURL: 'graphql',
+        subscriptionsEndpoint: `ws://localhost:${process.env.API_PORT}/subscriptions`
+    }));
 
-    app.listen(process.env.API_PORT, () => {
-        console.log(`Go to http://localhost:${process.env.API_PORT}/graphiql to run queries!`);
+    const ws = createServer(app);
+    const e:any = execute;
+    const s:any = subscribe;
+    ws.listen(process.env.API_PORT, () => {
+        console.log(`GraphQL Server is now running on http://localhost:${process.env.API_PORT}`);
+        new SubscriptionServer({
+            execute: e,
+            subscribe: s,
+            schema: executableSchema
+        }, {
+            server: ws,
+            path: '/subscriptions',
+        })
     })
 })
 .catch(err => {

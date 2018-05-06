@@ -2,6 +2,7 @@ import { TripModel } from "../models";
 import authMutationFactory from "../authMutationFactory";
 import { toTripModel } from "../../transformers";
 import createTripCommand from "../../domain/command/createTripCommand";
+import { pubSub } from '../../pubSubProvider';
 
 export const schema = [
     `
@@ -28,13 +29,17 @@ export const resolver = {
     Mutation: {
         createTrip: authMutationFactory<CreateTripPayload>(
             async (root, args, ctx) => {
-                return {
-                    trip: toTripModel(
-                        await createTripCommand(
-                            args.input,
-                            ctx.user
-                        )
+                const trip = toTripModel(
+                    await createTripCommand(
+                        args.input,
+                        ctx.user
                     )
+                );
+                pubSub.publish('tripCreated', {
+                    tripCreated: trip
+                })
+                return {
+                    trip
                 }
         })
     }
