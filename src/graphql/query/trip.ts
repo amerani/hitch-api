@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm";
+import { getRepository, FindManyOptions } from "typeorm";
 import { Trip } from "../../domain/entity/Trip";
 import { toTripModel } from "../../transformers";
 import { fetchTripByGraphId } from "../../domain/query/queries";
@@ -25,10 +25,13 @@ export const resolver = {
             const repo = getRepository(Trip);
 
             const queries:Promise<Trip[]>[] = [];
-            let findOptions = {
+            let findOptions:FindManyOptions<Trip> = {
                 skip: skip || 0,
                 take: take || 10,
-                relations: ["legs", "legs.origin", "legs.destination"]
+                relations: ["legs", "legs.origin", "legs.destination"],
+                order: {
+                    "id": "DESC"
+                }
             };
 
             queries.push(repo.find(findOptions));
@@ -43,7 +46,7 @@ export const resolver = {
             }
 
             const tripsResponses = await Promise.all(queries);
-            const trips = tripsResponses.reduce((prev, cur) =>{
+            const trips = tripsResponses.reduce((prev, cur) => {
                 prev.push(...cur);
                 return prev;
              }, [])
