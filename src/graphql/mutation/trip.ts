@@ -38,6 +38,9 @@ export const resolver = {
                 pubSub.publish('tripCreated', {
                     tripCreated: trip
                 })
+                pubSub.publish('notification', {
+                    notification: trip
+                })
                 return {
                     trip
                 }

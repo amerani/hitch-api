@@ -3,6 +3,8 @@ import { Trip } from "../entity/Trip";
 import { getRepository } from "typeorm";
 import { Leg } from "../entity/Leg";
 import { fetchTripByGraphId } from "../query/queries";
+import { pubSub } from '../../pubSubProvider';
+import { toLegModel } from "../../transformers";
 
 export default async function(
     input: CreateLegInput)
@@ -38,5 +40,9 @@ export default async function(
     
     trip.legs.push(leg);
     await repo.save(trip);
+    pubSub.publish('notification', {
+        notification: toLegModel(leg)
+    });
+
     return await fetchTripByGraphId(<any>input.tripId);
 }

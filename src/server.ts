@@ -33,9 +33,12 @@ createConnection(typeorm()).then(() => {
                 mutation:String
             }
 
+            union Notification = Trip | Leg | Reservation
+
             type Subscription {
                 subscription:String
                 tripCreated: Trip
+                notification: Notification
             }
 
             type schema {
@@ -64,6 +67,28 @@ createConnection(typeorm()).then(() => {
             },
             tripCreated: {
                 subscribe: () => pubSub.asyncIterator('tripCreated')
+            },
+            notification: {
+                subscribe: withFilter(
+                    () => pubSub.asyncIterator('notification'),
+                    (payload, variable) => {
+                        console.log(payload);
+                        return true;
+                    }
+                )
+            }
+        },
+        Notification: {
+            __resolveType(obj) {
+                if(obj.legs) {
+                    return 'Trip'
+                }
+
+                if(obj.transport) {
+                    return 'Leg'
+                }
+
+                return 'Reservation'
             }
         }
     }
