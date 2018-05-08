@@ -109,9 +109,7 @@ createConnection(typeorm()).then(() => {
         const user = req.user && await fetchUserById(req.user.id);
         return {
             schema: executableSchema,
-            context: {
-                user: user || Promise.resolve(null)
-            }
+            context: { user }
         }
     });
 

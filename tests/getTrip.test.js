@@ -33,10 +33,10 @@ test('should only get publicly available trips when un auth', async () => {
     expect(data[0].legs[0].transport).toBeNull();
 })
 
-test('should also get my trips when auth', async () => {
+test('should only get my trips', async () => {
     const query = gql`
         query {
-            trips(take:1) {
+            myTrips(take:1) {
                 createdBy {
                     email
                 }
@@ -64,7 +64,7 @@ test('should also get my trips when auth', async () => {
         }
     });
 
-    const data = response.data.trips;
+    const data = response.data.myTrips;
 
-    expect(data).toHaveLength(2);
+    expect(data).toHaveLength(1);
 })
