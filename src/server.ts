@@ -66,7 +66,14 @@ createConnection(typeorm()).then(() => {
                 }
             },
             tripCreated: {
-                subscribe: () => pubSub.asyncIterator('tripCreated')
+                subscribe: withFilter(
+                    () => pubSub.asyncIterator('tripCreated'),
+                    (payload, variable) => {
+                        const owner = payload.tripCreated.createdBy.id;                        
+                        console.log("tripOwner", owner);
+                        return true;
+                    }
+                )
             },
             notification: {
                 subscribe: withFilter(

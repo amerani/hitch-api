@@ -6,7 +6,7 @@ services:
     image: node
     restart: always
     build: .
-    command: bash -c "npm install && npm run serve"
+    command: bash -c "npm install -g yarn && yarn install && yarn run watch-server"
     working_dir: /home/node/app
     volumes:
       - ./:/home/node/app
