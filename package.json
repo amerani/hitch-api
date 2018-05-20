@@ -19,7 +19,7 @@
       "url": "git+ssh://git@gitlab.com/project-hitch/hitch.git"
    },
    "author": "Alek Merani",
-   "license": "UNLICENSED",
+   "license": "AGPL-3.0-or-later",
    "bugs": {
       "url": "https://gitlab.com/project-hitch/hitch/issues"
    },
